@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gabainé Optika — Időpontfoglalás | Albertirsa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --orange: #f59340;
+  --orange-dark: #e07d28;
+  --orange-light: #fde9d0;
+  --orange-lighter: #fff8f0;
+  --ink: #1c1410;
+  --cream: #fffaf5;
+  --warm: #fff1e2;
+  --muted: #9a8070;
+  --card: #ffffff;
+  --border: #f0dcc8;
+  --shadow: 0 4px 32px rgba(245,147,64,0.10);
+  --shadow-lg: 0 16px 64px rgba(245,147,64,0.16);
+  --green: #2d7a50;
+  --green-light: #d6f0e0;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Inter', sans-serif; background: var(--cream); color: var(--ink); min-height: 100vh; overflow-x: hidden; }
+
+/* PARTICLES */
+.particles { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+.particle { position: absolute; border-radius: 50%; opacity: 0.15; animation: floatP linear infinite; }
+@keyframes floatP {
+  0%   { transform: translateY(110vh) rotate(0deg) scale(0.5); opacity: 0; }
+  10%  { opacity: 0.15; }
+  90%  { opacity: 0.15; }
+  100% { transform: translateY(-20vh) rotate(720deg) scale(1.2); opacity: 0; }
+}
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  background: rgba(255,250,245,0.94); backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 2.5rem; height: 70px; transition: box-shadow 0.3s;
+}
+nav.scrolled { box-shadow: 0 2px 20px rgba(245,147,64,0.12); }
+.nav-logo {
+  display: flex; align-items: center; gap: 0.65rem;
+  font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 700;
+  color: var(--ink); text-decoration: none; letter-spacing: 0.01em;
+}
+.nav-logo .logo-icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: linear-gradient(135deg, var(--orange), var(--orange-dark));
+  display: flex; align-items: center; justify-content: center; font-size: 1rem;
+  box-shadow: 0 4px 12px rgba(245,147,64,0.35);
+}
+.nav-logo span { color: var(--orange-dark); }
+.nav-links { display: flex; align-items: center; gap: 0.3rem; }
+.nav-btn {
+  background: none; border: none; cursor: pointer; padding: 0.5rem 0.9rem;
+  border-radius: 8px; font-family: 'Inter', sans-serif; font-size: 0.87rem;
+  font-weight: 500; color: var(--muted); transition: all 0.2s; text-decoration: none;
+}
+.nav-btn:hover { color: var(--ink); background: var(--orange-lighter); }
+.nav-btn.active { color: var(--orange-dark); background: var(--orange-lighter); }
+.nav-book-btn {
+  background: linear-gradient(135deg, var(--orange), var(--orange-dark)); color: white;
+  border: none; border-radius: 10px; padding: 0.55rem 1.25rem; font-size: 0.87rem;
+  font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif;
+  box-shadow: 0 4px 14px rgba(245,147,64,0.35); transition: all 0.22s; margin-left: 0.5rem;
+}
+.nav-book-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(245,147,64,0.45); }
+
+/* PAGES */
+.page { display: none; min-height: 100vh; position: relative; z-index: 1; }
+.page.active { display: block; }
+
+/* HERO */
+.hero {
+  min-height: 100vh; display: flex; align-items: center;
+  position: relative; overflow: hidden; padding-top: 70px;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 70% 40%, rgba(245,147,64,0.11) 0%, transparent 65%),
+              radial-gradient(ellipse 50% 50% at 15% 80%, rgba(245,147,64,0.06) 0%, transparent 60%);
+}
+.hero-lens {
+  position: absolute; right: -80px; top: 50%; transform: translateY(-50%);
+  width: 600px; height: 600px; opacity: 0.06; animation: rotateLens 35s linear infinite;
+}
+@keyframes rotateLens { to { transform: translateY(-50%) rotate(360deg); } }
+
+.hero-inner {
+  max-width: 1100px; margin: 0 auto; padding: 2rem 2.5rem 3rem;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;
+  align-items: center; width: 100%; position: relative; z-index: 2;
+}
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: var(--orange-light); color: var(--orange-dark);
+  font-size: 0.74rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 0.35rem 0.9rem; border-radius: 20px; margin-bottom: 1.3rem;
+  border: 1px solid rgba(245,147,64,0.25); animation: fadeUp 0.7s ease both;
+}
+.hero h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.6rem, 4.5vw, 4rem); line-height: 1.1; font-weight: 700;
+  letter-spacing: -0.01em; margin-bottom: 0.9rem; animation: fadeUp 0.7s 0.1s ease both;
+}
+.hero h1 em { color: var(--orange); font-style: italic; }
+.hero-slogan {
+  font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-style: italic;
+  color: var(--orange-dark); margin-bottom: 1rem; font-weight: 600;
+  animation: fadeUp 0.7s 0.15s ease both;
+}
+.hero p {
+  font-size: 1rem; color: var(--muted); line-height: 1.75; margin-bottom: 2rem;
+  max-width: 440px; animation: fadeUp 0.7s 0.2s ease both;
+}
+.hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; animation: fadeUp 0.7s 0.3s ease both; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.88rem 1.8rem; border-radius: 12px;
+  font-family: 'Inter', sans-serif; font-size: 0.93rem; font-weight: 600;
+  cursor: pointer; border: none; transition: all 0.22s; text-decoration: none;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--orange), var(--orange-dark)); color: white;
+  box-shadow: 0 6px 20px rgba(245,147,64,0.35);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(245,147,64,0.45); }
+.btn-outline { background: transparent; color: var(--ink); border: 1.5px solid var(--border); }
+.btn-outline:hover { border-color: var(--orange); color: var(--orange-dark); background: var(--orange-lighter); }
+
+/* HERO VISUAL */
+.hero-visual { position: relative; height: 440px; animation: fadeUp 0.8s 0.25s ease both; }
+.eye-svg-wrap { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 300px; height: 180px; }
+.eye-svg-wrap svg { width: 100%; height: 100%; overflow: visible; }
+.float-card {
+  position: absolute; background: white; border-radius: 16px; padding: 1rem 1.2rem;
+  box-shadow: 0 12px 40px rgba(245,147,64,0.18); border: 1px solid var(--border); white-space: nowrap;
+}
+.float-card-1 { top: 4%; right: 0; animation: float1 5s ease-in-out infinite; }
+.float-card-2 { bottom: 8%; left: -15px; animation: float2 6s ease-in-out infinite; }
+.float-card-3 { top: 43%; right: -10px; animation: float1 7s 1.2s ease-in-out infinite; }
+@keyframes float1 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+@keyframes float2 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(8px)} }
+.float-card .fc-label { font-size: 0.68rem; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em; }
+.float-card .fc-value { font-size: 0.92rem; font-weight: 700; color: var(--ink); margin-top: 2px; }
+.float-card .fc-icon { font-size: 1.25rem; margin-bottom: 0.25rem; }
+.fc-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; }
+.fc-dot.green { background: #34c769; box-shadow: 0 0 6px rgba(52,199,105,0.5); }
+
+/* TRUST STRIP */
+.trust-strip { background: var(--orange-light); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 1.2rem 2.5rem; }
+.trust-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; gap: 1.2rem; }
+.trust-item { display: flex; align-items: center; gap: 0.6rem; font-size: 0.87rem; font-weight: 500; color: var(--orange-dark); }
+.trust-item .ti-icon { font-size: 1.1rem; }
+
+/* SECTION */
+.section { max-width: 1100px; margin: 0 auto; padding: 5rem 2.5rem; }
+.section-eyebrow {
+  font-size: 0.74rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--orange-dark); margin-bottom: 0.6rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.section-eyebrow::before { content:''; display:block; width:22px; height:2px; background:var(--orange); border-radius:2px; }
+.section-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem,3.5vw,3rem); font-weight: 700; letter-spacing: -0.01em; margin-bottom: 0.8rem; line-height: 1.15; }
+.section-sub { color: var(--muted); font-size: 1rem; line-height: 1.7; margin-bottom: 3rem; max-width: 500px; }
+
+/* SERVICES GRID */
+.services-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px,1fr)); gap: 1.4rem; }
+.service-card {
+  background: var(--card); border-radius: 20px; padding: 1.8rem;
+  border: 1.5px solid var(--border); cursor: pointer; transition: all 0.25s;
+  position: relative; overflow: hidden;
+}
+.service-card::after {
+  content:''; position:absolute; inset:0;
+  background: linear-gradient(135deg, rgba(245,147,64,0.05), transparent);
+  opacity:0; transition: opacity 0.25s;
+}
+.service-card:hover { border-color: var(--orange); box-shadow: var(--shadow-lg); transform: translateY(-3px); }
+.service-card:hover::after { opacity: 1; }
+.service-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.1rem; }
+.service-icon-wrap {
+  width: 50px; height: 50px; background: var(--orange-light); border-radius: 14px;
+  display: flex; align-items: center; justify-content: center; font-size: 1.55rem;
+  transition: transform 0.25s;
+}
+.service-card:hover .service-icon-wrap { transform: scale(1.1) rotate(-5deg); }
+.service-badge { font-size: 0.71rem; font-weight: 700; color: var(--orange-dark); background: var(--orange-light); border-radius: 20px; padding: 0.22rem 0.7rem; border: 1px solid rgba(245,147,64,0.2); }
+.service-name { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 700; margin-bottom: 0.4rem; line-height: 1.2; }
+.service-desc { font-size: 0.86rem; color: var(--muted); line-height: 1.65; margin-bottom: 1.2rem; }
+.service-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 1rem; border-top: 1px solid var(--border); }
+.service-duration { font-size: 0.81rem; color: var(--muted); }
+.service-price { font-weight: 700; font-size: 1rem; color: var(--orange-dark); }
+.service-arrow { font-size: 0.81rem; color: var(--orange); font-weight: 600; opacity: 0; transition: opacity 0.2s; }
+.service-card:hover .service-arrow { opacity: 1; }
+
+/* INFO / CONTACT DARK SECTION */
+.info-section { background: linear-gradient(135deg, #1c1410 0%, #2a1c12 100%); color: white; position: relative; overflow: hidden; }
+.info-section::before { content:''; position:absolute; inset:0; background: radial-gradient(ellipse 60% 70% at 80% 50%, rgba(245,147,64,0.11) 0%, transparent 60%); }
+.info-inner { max-width: 1100px; margin: 0 auto; padding: 5rem 2.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; position: relative; z-index: 2; }
+.info-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem,3vw,2.8rem); font-weight: 700; line-height: 1.15; margin-bottom: 1.2rem; }
+.info-title em { color: var(--orange); font-style: italic; }
+.info-desc { color: rgba(255,255,255,0.6); font-size: 0.97rem; line-height: 1.75; margin-bottom: 2rem; }
+.contact-list { display: flex; flex-direction: column; gap: 0.9rem; }
+.contact-item {
+  display: flex; align-items: center; gap: 1rem; padding: 0.95rem 1.15rem;
+  background: rgba(255,255,255,0.07); border-radius: 14px; border: 1px solid rgba(255,255,255,0.1);
+  transition: all 0.2s; text-decoration: none; color: white;
+}
+.contact-item:hover { background: rgba(245,147,64,0.15); border-color: rgba(245,147,64,0.35); transform: translateX(3px); }
+.contact-item-icon { width: 42px; height: 42px; border-radius: 11px; background: rgba(245,147,64,0.2); display: flex; align-items: center; justify-content: center; font-size: 1.15rem; flex-shrink: 0; }
+.contact-item-label { font-size: 0.7rem; color: rgba(255,255,255,0.4); font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em; }
+.contact-item-value { font-size: 0.92rem; font-weight: 600; margin-top: 2px; }
+.social-row { display: flex; gap: 0.75rem; margin-top: 1.5rem; flex-wrap: wrap; }
+.social-btn {
+  display: flex; align-items: center; gap: 0.6rem; padding: 0.7rem 1.2rem;
+  border-radius: 10px; font-size: 0.87rem; font-weight: 600;
+  text-decoration: none; transition: all 0.2s; color: white;
+  border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.08);
+}
+.social-btn:hover { transform: translateY(-2px); }
+.social-btn.fb { background: rgba(24,119,242,0.2); border-color: rgba(24,119,242,0.4); }
+.social-btn.fb:hover { background: rgba(24,119,242,0.35); }
+.social-btn.ig { background: rgba(225,48,108,0.15); border-color: rgba(225,48,108,0.35); }
+.social-btn.ig:hover { background: rgba(225,48,108,0.3); }
+.map-placeholder { border-radius: 20px; overflow: hidden; box-shadow: var(--shadow-lg); border: 1px solid rgba(255,255,255,0.1); height: 300px; }
+.map-placeholder iframe { width: 100%; height: 100%; border: none; }
+
+/* BOOKING PAGE */
+#page-book { padding-top: 70px; background: linear-gradient(180deg, var(--orange-lighter) 0%, var(--cream) 280px); }
+.booking-container { max-width: 800px; margin: 0 auto; padding: 3rem 2rem 5rem; }
+.booking-header { text-align: center; margin-bottom: 3rem; }
+.booking-header h1 { font-family: 'Cormorant Garamond', serif; font-size: 2.6rem; font-weight: 700; margin-bottom: 0.4rem; }
+.booking-header p { color: var(--muted); font-size: 0.95rem; }
+.booking-steps {
+  display: flex; margin-bottom: 3rem; background: var(--card);
+  border-radius: 14px; padding: 0.4rem; border: 1px solid var(--border); box-shadow: var(--shadow);
+}
+.step-indicator { flex: 1; text-align: center; padding: 0.75rem 0.5rem; border-radius: 10px; font-size: 0.81rem; font-weight: 500; color: var(--muted); transition: all 0.2s; }
+.step-indicator.active { background: linear-gradient(135deg, var(--orange), var(--orange-dark)); color: white; box-shadow: 0 4px 12px rgba(245,147,64,0.3); }
+.step-indicator.done { color: var(--green); }
+.booking-step { display: none; }
+.booking-step.active { display: block; animation: fadeUp 0.35s ease; }
+.step-title { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 700; margin-bottom: 0.4rem; }
+.step-sub { color: var(--muted); font-size: 0.95rem; margin-bottom: 2rem; }
+.service-select-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(220px,1fr)); gap: 1rem; }
+.service-select-card { background: var(--card); border-radius: 16px; padding: 1.4rem; border: 1.5px solid var(--border); cursor: pointer; transition: all 0.2s; }
+.service-select-card:hover { border-color: var(--orange); box-shadow: var(--shadow); transform: translateY(-2px); }
+.service-select-card.selected { border-color: var(--orange); background: var(--orange-lighter); box-shadow: 0 0 0 3px rgba(245,147,64,0.15); }
+.service-select-card .sscard-icon { font-size: 1.8rem; margin-bottom: 0.7rem; }
+.service-select-card .sscard-name { font-weight: 600; font-size: 0.94rem; margin-bottom: 0.2rem; }
+.service-select-card .sscard-price { font-size: 0.81rem; color: var(--muted); }
+.date-picker { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+.calendar-widget { background: var(--card); border-radius: 18px; padding: 1.5rem; border: 1px solid var(--border); box-shadow: var(--shadow); }
+.cal-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; }
+.cal-nav-btn { background: var(--warm); border: none; border-radius: 10px; width: 34px; height: 34px; cursor: pointer; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; transition: all 0.15s; color: var(--orange-dark); font-weight: 700; }
+.cal-nav-btn:hover { background: var(--orange-light); }
+.cal-nav-title { font-family: 'Cormorant Garamond', serif; font-weight: 700; font-size: 1.1rem; }
+.booking-cal-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 3px; text-align: center; }
+.bcal-day-label { font-size: 0.69rem; font-weight: 600; color: var(--muted); padding: 6px 0; }
+.bcal-day { font-size: 0.85rem; padding: 9px 4px; border-radius: 9px; cursor: pointer; transition: all 0.15s; border: none; background: none; font-family: 'Inter', sans-serif; }
+.bcal-day:hover:not(.disabled):not(.empty) { background: var(--warm); }
+.bcal-day.selected { background: linear-gradient(135deg,var(--orange),var(--orange-dark)) !important; color: white; font-weight: 700; box-shadow: 0 4px 10px rgba(245,147,64,0.3); }
+.bcal-day.today-mark { border: 2px solid var(--orange); color: var(--orange-dark); font-weight: 700; }
+.bcal-day.disabled { color: #ddd; cursor: not-allowed; }
+.bcal-day.empty { visibility: hidden; cursor: default; }
+.time-slots h3 { font-weight: 600; font-size: 0.97rem; margin-bottom: 1rem; }
+.slots-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; max-height: 330px; overflow-y: auto; }
+.time-slot { background: var(--card); border: 1.5px solid var(--border); border-radius: 10px; padding: 0.7rem; font-size: 0.88rem; font-weight: 500; cursor: pointer; transition: all 0.15s; text-align: center; }
+.time-slot:hover { border-color: var(--orange); color: var(--orange-dark); background: var(--orange-lighter); }
+.time-slot.selected { background: linear-gradient(135deg,var(--orange),var(--orange-dark)); color: white; border-color: var(--orange); font-weight: 600; }
+.time-slot.taken { opacity: 0.4; cursor: not-allowed; text-decoration: line-through; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.3rem; }
+.form-group { display: flex; flex-direction: column; gap: 0.45rem; }
+.form-group.full { grid-column: 1 / -1; }
+label { font-size: 0.84rem; font-weight: 600; color: var(--ink); }
+input, select, textarea { padding: 0.8rem 1rem; border-radius: 11px; border: 1.5px solid var(--border); background: var(--card); font-family: 'Inter', sans-serif; font-size: 0.93rem; color: var(--ink); transition: border-color 0.15s; outline: none; }
+input:focus, select:focus, textarea:focus { border-color: var(--orange); box-shadow: 0 0 0 3px rgba(245,147,64,0.12); }
+textarea { resize: vertical; min-height: 90px; }
+.confirm-card { background: var(--card); border-radius: 20px; padding: 2rem; border: 1px solid var(--border); margin-bottom: 1.5rem; box-shadow: var(--shadow); }
+.confirm-title { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 700; margin-bottom: 1.3rem; padding-bottom: 0.9rem; border-bottom: 1px solid var(--border); }
+.confirm-row { display: flex; justify-content: space-between; align-items: center; padding: 0.65rem 0; border-bottom: 1px solid var(--warm); font-size: 0.9rem; }
+.confirm-row:last-child { border-bottom: none; }
+.confirm-row span:first-child { color: var(--muted); }
+.confirm-row strong { font-weight: 600; text-align: right; max-width: 60%; }
+.success-screen { text-align: center; padding: 3rem 1rem; }
+.success-icon { width: 88px; height: 88px; border-radius: 50%; background: linear-gradient(135deg,#34c769,#22a855); display: flex; align-items: center; justify-content: center; font-size: 2.2rem; margin: 0 auto 1.6rem; animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1); box-shadow: 0 8px 24px rgba(52,199,105,0.35); }
+@keyframes popIn { from { transform: scale(0); } to { transform: scale(1); } }
+.success-screen h2 { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; margin-bottom: 0.6rem; }
+.success-screen p { color: var(--muted); font-size: 0.97rem; margin-bottom: 2rem; }
+.ref-code { display: inline-block; background: var(--orange-light); border-radius: 10px; padding: 0.55rem 1.4rem; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.1em; color: var(--orange-dark); margin-bottom: 2rem; border: 1px solid rgba(245,147,64,0.25); }
+.step-actions { display: flex; gap: 1rem; margin-top: 2rem; justify-content: space-between; align-items: center; }
+
+/* ADMIN */
+#page-admin { background: #140d08; color: white; min-height: 100vh; padding-top: 70px; }
+.admin-container { max-width: 1020px; margin: 0 auto; padding: 3rem 2rem; }
+.admin-header { margin-bottom: 2.5rem; }
+.admin-header h1 { font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; margin-bottom: 0.3rem; }
+.admin-header p { color: rgba(255,255,255,0.4); }
+.admin-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; margin-bottom: 2.5rem; }
+.stat-card { background: rgba(255,255,255,0.05); border-radius: 18px; padding: 1.5rem; border: 1px solid rgba(255,255,255,0.08); }
+.stat-value { font-family: 'Cormorant Garamond', serif; font-size: 2.6rem; font-weight: 700; }
+.stat-label { font-size: 0.79rem; color: rgba(255,255,255,0.38); margin-top: 0.25rem; }
+.stat-accent { color: var(--orange); }
+.admin-filter { display: flex; gap: 0.6rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+.filter-btn { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.45); border-radius: 9px; padding: 0.45rem 1rem; font-family: 'Inter', sans-serif; font-size: 0.84rem; cursor: pointer; transition: all 0.15s; }
+.filter-btn:hover, .filter-btn.active { background: linear-gradient(135deg,var(--orange),var(--orange-dark)); color: white; border-color: var(--orange); }
+.apt-list { display: flex; flex-direction: column; gap: 0.8rem; }
+.apt-row { background: rgba(255,255,255,0.05); border-radius: 16px; padding: 1.2rem 1.5rem; border: 1px solid rgba(255,255,255,0.08); display: grid; grid-template-columns: 1fr 1fr 1fr auto; align-items: center; gap: 1rem; transition: background 0.15s; }
+.apt-row:hover { background: rgba(255,255,255,0.08); }
+.apt-row .client-name { font-weight: 600; font-size: 0.95rem; }
+.apt-row .client-email { font-size: 0.77rem; color: rgba(255,255,255,0.38); margin-top: 2px; }
+.apt-row .apt-service { font-size: 0.88rem; color: var(--orange-light); }
+.apt-row .apt-datetime span { display: block; font-size: 0.85rem; }
+.apt-row .apt-datetime .apt-time { font-size: 0.78rem; color: rgba(255,255,255,0.38); }
+.status-badge { font-size: 0.73rem; font-weight: 700; padding: 0.25rem 0.75rem; border-radius: 20px; display: inline-block; margin-top: 4px; }
+.status-confirmed { background: rgba(52,199,105,0.2); color: #5dda8a; }
+.status-cancelled { background: rgba(245,147,64,0.2); color: #f5a060; }
+.cancel-btn { background: rgba(245,147,64,0.12); border: 1px solid rgba(245,147,64,0.3); color: var(--orange); border-radius: 9px; padding: 0.45rem 0.9rem; font-family: 'Inter', sans-serif; font-size: 0.8rem; cursor: pointer; transition: all 0.15s; }
+.cancel-btn:hover { background: var(--orange); color: white; }
+.no-apts { text-align: center; padding: 3.5rem; color: rgba(255,255,255,0.3); }
+.no-apts .empty-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+.admin-login { max-width: 380px; margin: 8vh auto; background: rgba(255,255,255,0.04); border-radius: 22px; padding: 2.8rem; border: 1px solid rgba(255,255,255,0.1); text-align: center; box-shadow: 0 24px 60px rgba(0,0,0,0.4); }
+.admin-login .lock-icon { font-size: 2.8rem; margin-bottom: 1rem; }
+.admin-login h2 { font-family: 'Cormorant Garamond', serif; font-size: 2rem; margin-bottom: 0.4rem; }
+.admin-login p { color: rgba(255,255,255,0.4); font-size: 0.9rem; margin-bottom: 2rem; }
+.admin-login input { width: 100%; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14); color: white; margin-bottom: 0.9rem; }
+.admin-login input::placeholder { color: rgba(255,255,255,0.28); }
+.btn-admin { width: 100%; background: linear-gradient(135deg,var(--orange),var(--orange-dark)); color: white; border: none; border-radius: 12px; padding: 0.85rem; font-size: 0.95rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; box-shadow: 0 6px 20px rgba(245,147,64,0.35); transition: all 0.2s; }
+.btn-admin:hover { transform: translateY(-1px); box-shadow: 0 10px 28px rgba(245,147,64,0.45); }
+.login-hint { font-size: 0.75rem; color: rgba(255,255,255,0.22); margin-top: 1rem; }
+
+/* FOOTER */
+footer { background: var(--ink); color: rgba(255,255,255,0.55); padding: 3.5rem 2.5rem 2rem; }
+.footer-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 3rem; }
+.footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 700; color: white; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.6rem; }
+.footer-logo .fl-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--orange); }
+.footer-brand p { font-size: 0.87rem; line-height: 1.7; color: rgba(255,255,255,0.42); }
+.footer-col h4 { color: white; font-weight: 600; font-size: 0.9rem; margin-bottom: 1rem; }
+.footer-col a, .footer-col p { display: block; font-size: 0.85rem; color: rgba(255,255,255,0.42); text-decoration: none; margin-bottom: 0.55rem; transition: color 0.2s; line-height: 1.5; }
+.footer-col a:hover { color: var(--orange); }
+.footer-social { display: flex; gap: 0.6rem; margin-top: 1.2rem; }
+.footer-social a { width: 38px; height: 38px; border-radius: 10px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.11); display: flex; align-items: center; justify-content: center; font-size: 1rem; text-decoration: none; color: white; transition: all 0.2s; }
+.footer-social a:hover { background: var(--orange); border-color: var(--orange); transform: translateY(-2px); }
+.footer-bottom { max-width: 1100px; margin: 2rem auto 0; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center; font-size: 0.81rem; color: rgba(255,255,255,0.28); }
+
+/* TOAST */
+.toast { position: fixed; bottom: 2rem; right: 2rem; z-index: 999; background: var(--ink); color: white; padding: 1rem 1.5rem; border-radius: 14px; font-size: 0.9rem; box-shadow: var(--shadow-lg); transform: translateY(120px); opacity: 0; transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1); display: flex; align-items: center; gap: 0.7rem; border-left: 4px solid var(--orange); }
+.toast.show { transform: translateY(0); opacity: 1; }
+.scroll-top { position: fixed; bottom: 2rem; left: 2rem; z-index: 500; width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg,var(--orange),var(--orange-dark)); color: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; box-shadow: 0 4px 14px rgba(245,147,64,0.4); opacity: 0; transform: translateY(20px); transition: all 0.3s; pointer-events: none; }
+.scroll-top.visible { opacity: 1; transform: translateY(0); pointer-events: all; }
+.scroll-top:hover { transform: translateY(-3px); }
+
+@media (max-width: 768px) {
+  .hero-inner { grid-template-columns: 1fr; padding: 2.5rem 1.5rem 2rem; gap: 2rem; }
+  .hero-visual { display: none; }
+  .info-inner { grid-template-columns: 1fr; padding: 3rem 1.5rem; }
+  .map-placeholder { display: none; }
+  .date-picker { grid-template-columns: 1fr; }
+  .form-grid { grid-template-columns: 1fr; }
+  .form-group.full { grid-column: 1; }
+  .apt-row { grid-template-columns: 1fr 1fr; }
+  .admin-stats { grid-template-columns: 1fr 1fr; }
+  nav { padding: 0 1.2rem; }
+  .footer-inner { grid-template-columns: 1fr; gap: 2rem; }
+  .footer-bottom { flex-direction: column; gap: 0.5rem; text-align: center; }
+  .section { padding: 3.5rem 1.5rem; }
+  .trust-inner { justify-content: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<div class="particles" id="particles"></div>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <a class="nav-logo" href="#" onclick="return showPage('home')">
+    <div class="logo-icon">👁</div>
+    Gabainé <span>Optika</span>
+  </a>
+  <div class="nav-links">
+    <button class="nav-btn active" id="nav-home" onclick="showPage('home')">Főoldal</button>
+    <button class="nav-btn" onclick="showPage('home'); setTimeout(()=>document.getElementById('services-section').scrollIntoView({behavior:'smooth'}),120)">Szolgáltatások</button>
+    <button class="nav-btn" onclick="showPage('home'); setTimeout(()=>document.getElementById('contact-section').scrollIntoView({behavior:'smooth'}),120)">Kapcsolat</button>
+    <!-- Admin panel is disabled for static public deployment -->
+    <button class="nav-book-btn" onclick="showPage('book')">🗓 Időpontfoglalás</button>
+  </div>
+</nav>
+
+<!-- ═══════════════════════ HOME ═══════════════════════ -->
+<div id="page-home" class="page active">
+
+  <section class="hero">
+    <div class="hero-bg"></div>
+
+    <!-- Decorative background lens -->
+    <svg class="hero-lens" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="100" cy="100" r="95" stroke="#f59340" stroke-width="1.2"/>
+      <circle cx="100" cy="100" r="75" stroke="#f59340" stroke-width="0.8" stroke-dasharray="5 4"/>
+      <circle cx="100" cy="100" r="55" stroke="#f59340" stroke-width="1.2"/>
+      <circle cx="100" cy="100" r="35" stroke="#f59340" stroke-width="0.7" stroke-dasharray="3 3"/>
+      <circle cx="100" cy="100" r="12" fill="#f59340" opacity="0.25"/>
+      <line x1="5" y1="100" x2="195" y2="100" stroke="#f59340" stroke-width="0.7" opacity="0.45"/>
+      <line x1="100" y1="5" x2="100" y2="195" stroke="#f59340" stroke-width="0.7" opacity="0.45"/>
+      <line x1="30" y1="30" x2="170" y2="170" stroke="#f59340" stroke-width="0.5" opacity="0.28"/>
+      <line x1="170" y1="30" x2="30" y2="170" stroke="#f59340" stroke-width="0.5" opacity="0.28"/>
+    </svg>
+
+    <div class="hero-inner">
+      <div class="hero-content">
+        <div class="hero-tag">✦ Albertirsa · Vinnyica u. 8.</div>
+        <h1>Látásszakértők<br><em>szívvel és tudással</em></h1>
+        <div class="hero-slogan">„Láss, ne csak nézz! Szem előtt az éleslátás!"</div>
+        <p>Minőségi szemüvegkeretek, szemüveglencsék és kontaktlencsék — személyre szabva. Látogasson el hozzánk Albertirsán!</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary" onclick="showPage('book')">🗓 Időpontfoglalás</button>
+          <button class="btn btn-outline" onclick="showPage('home'); setTimeout(()=>document.getElementById('contact-section').scrollIntoView({behavior:'smooth'}),120)">📍 Elérhetőségek</button>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <!-- Animated SVG Eye -->
+        <div class="eye-svg-wrap">
+          <svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="irisGrad" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#fbb26a"/>
+                <stop offset="60%" stop-color="#f59340"/>
+                <stop offset="100%" stop-color="#e07d28"/>
+              </radialGradient>
+              <radialGradient id="bgGrad" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#ffffff"/>
+                <stop offset="100%" stop-color="#fff8f0"/>
+              </radialGradient>
+              <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+                <feGaussianBlur stdDeviation="5" result="blur"/>
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+              <clipPath id="eyeClip">
+                <path d="M 20 90 Q 160 0 300 90 Q 160 180 20 90 Z"/>
+              </clipPath>
+            </defs>
+            <!-- Eye white -->
+            <path d="M 20 90 Q 160 0 300 90 Q 160 180 20 90 Z" fill="url(#bgGrad)" stroke="#f0dcc8" stroke-width="2.5"/>
+            <!-- Iris glow -->
+            <circle cx="160" cy="90" r="56" fill="url(#irisGrad)" filter="url(#glow)" clip-path="url(#eyeClip)"/>
+            <!-- Iris texture rings -->
+            <circle cx="160" cy="90" r="44" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="2" clip-path="url(#eyeClip)"/>
+            <circle cx="160" cy="90" r="30" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1.5" clip-path="url(#eyeClip)"/>
+            <!-- Iris spokes -->
+            <g opacity="0.15" clip-path="url(#eyeClip)">
+              <line x1="160" y1="34" x2="160" y2="90" stroke="white" stroke-width="1.2"/>
+              <line x1="160" y1="90" x2="160" y2="146" stroke="white" stroke-width="1.2"/>
+              <line x1="104" y1="57" x2="160" y2="90" stroke="white" stroke-width="1.2"/>
+              <line x1="160" y1="90" x2="216" y2="123" stroke="white" stroke-width="1.2"/>
+              <line x1="104" y1="123" x2="160" y2="90" stroke="white" stroke-width="1.2"/>
+              <line x1="160" y1="90" x2="216" y2="57" stroke="white" stroke-width="1.2"/>
+            </g>
+            <!-- Pupil -->
+            <circle cx="160" cy="90" r="22" fill="#1c1410" clip-path="url(#eyeClip)"/>
+            <!-- Pupil animate -->
+            <circle cx="160" cy="90" r="22" fill="#1c1410" clip-path="url(#eyeClip)">
+              <animate attributeName="r" values="22;19;22" dur="4s" repeatCount="indefinite"/>
+            </circle>
+            <!-- Highlights -->
+            <circle cx="150" cy="80" r="7" fill="white" opacity="0.75" clip-path="url(#eyeClip)"/>
+            <circle cx="168" cy="99" r="3.5" fill="white" opacity="0.4" clip-path="url(#eyeClip)"/>
+            <!-- Blink -->
+            <path d="M 20 90 Q 160 0 300 90" fill="url(#bgGrad)">
+              <animate attributeName="d" values="M 20 90 Q 160 0 300 90;M 20 90 Q 160 90 300 90;M 20 90 Q 160 0 300 90" keyTimes="0;0.5;1" dur="0.18s" begin="5s;11s;17s" fill="freeze"/>
+            </path>
+            <path d="M 20 90 Q 160 180 300 90" fill="url(#bgGrad)">
+              <animate attributeName="d" values="M 20 90 Q 160 180 300 90;M 20 90 Q 160 90 300 90;M 20 90 Q 160 180 300 90" keyTimes="0;0.5;1" dur="0.18s" begin="5s;11s;17s" fill="freeze"/>
+            </path>
+            <!-- Lashes -->
+            <g stroke="#c8a07a" stroke-width="1.8" stroke-linecap="round" opacity="0.5">
+              <line x1="75" y1="51" x2="70" y2="36"/><line x1="108" y1="28" x2="106" y2="13"/>
+              <line x1="143" y1="14" x2="143" y2="0"/><line x1="178" y1="14" x2="180" y2="0"/>
+              <line x1="212" y1="28" x2="217" y2="13"/><line x1="243" y1="51" x2="249" y2="37"/>
+            </g>
+          </svg>
+        </div>
+
+        <!-- Floating info cards -->
+        <div class="float-card float-card-1">
+          <div class="fc-icon">🏆</div>
+          <div class="fc-label">Tapasztalat</div>
+          <div class="fc-value">Megbízható szakértelem</div>
+        </div>
+        <div class="float-card float-card-2">
+          <span class="fc-dot green"></span>
+          <span style="font-size:0.85rem;font-weight:700;vertical-align:middle">Nyitva vagyunk</span><br>
+          <span style="font-size:0.77rem;color:var(--muted);display:block;margin-top:3px">Hétfő – Péntek</span>
+        </div>
+        <div class="float-card float-card-3">
+          <div class="fc-icon">👓</div>
+          <div class="fc-label">Keretek &amp; Lencsék</div>
+          <div class="fc-value">Széles választék</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST STRIP -->
+  <div class="trust-strip">
+    <div class="trust-inner">
+      <div class="trust-item"><span class="ti-icon">✅</span> Személyre szabott szemüveg</div>
+      <div class="trust-item"><span class="ti-icon">🔬</span> Korszerű vizsgálati eszközök</div>
+      <div class="trust-item"><span class="ti-icon">👓</span> Minőségi keretek &amp; lencsék</div>
+      <div class="trust-item"><span class="ti-icon">📍</span> Vinnyica u. 8., Albertirsa</div>
+      <div class="trust-item"><span class="ti-icon">📞</span>(70) 374 9235</div>
+    </div>
+  </div>
+
+  <!-- SERVICES -->
+  <div class="section" id="services-section">
+    <div class="section-eyebrow">Szolgáltatásaink</div>
+    <div class="section-title">Miben segíthetünk<br>látásán?</div>
+    <div class="section-sub">Átfogó szemvizsgálattól a keret-javításig — kattintson bármelyik szolgáltatásra az azonnali foglaláshoz.</div>
+    <div class="services-grid" id="home-services"></div>
+  </div>
+
+  <!-- CONTACT DARK -->
+  <div class="info-section" id="contact-section">
+    <div class="info-inner">
+      <div>
+        <div class="section-eyebrow" style="color:rgba(245,147,64,0.8)">Elérhetőség</div>
+        <div class="info-title">Látogasson el hozzánk <em>személyesen</em></div>
+        <div class="info-desc">Várjuk szeretettel üzletünkben Albertirsán! Ha kérdése van, hívjon minket vagy írjon e-mailt — mindig szívesen segítünk.</div>
+
+        <div class="contact-list">
+          <a class="contact-item" href="tel:+36703749235">
+            <div class="contact-item-icon">📞</div>
+            <div>
+              <div class="contact-item-label">Telefonszám</div>
+              <div class="contact-item-value">(70) 374 9235</div>
+            </div>
+          </a>
+          <a class="contact-item" href="mailto:gabaine.optika@gmail.com">
+            <div class="contact-item-icon">✉️</div>
+            <div>
+              <div class="contact-item-label">E-mail</div>
+              <div class="contact-item-value">gabaine.optika@gmail.com</div>
+            </div>
+          </a>
+          <a class="contact-item" href="https://maps.google.com/?q=Vinnyica+u.+8,+Albertirsa+2730+Hungary" target="_blank">
+            <div class="contact-item-icon">📍</div>
+            <div>
+              <div class="contact-item-label">Cím</div>
+              <div class="contact-item-value">Vinnyica u. 8., Albertirsa, 2730</div>
+            </div>
+          </a>
+        </div>
+
+        <div class="social-row">
+          <a class="social-btn fb" href="https://www.facebook.com/gabaineoptika/" target="_blank" rel="noopener">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            Facebook
+          </a>
+          <a class="social-btn ig" href="https://www.instagram.com/gabaineoptika/" target="_blank" rel="noopener">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            Instagram
+          </a>
+        </div>
+      </div>
+
+      <div class="map-placeholder">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2702.1!2d19.6200!3d47.2480!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4742e3c4a0000001%3A0x1!2sVinnyica+u.+8%2C+Albertirsa!5e0!3m2!1shu!2shu!4v1700000000001" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo"><span class="fl-dot"></span>Gabainé Optika</div>
+        <p>Minőségi szemészeti ellátás és optikai megoldások Albertirsán. Személyre szabott szemüvegkészítés, kontaktlencse-tanácsadás és látásvizsgálat.</p>
+        <div class="footer-social">
+          <a href="https://www.facebook.com/gabaineoptika/" target="_blank" rel="noopener" title="Facebook">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </a>
+          <a href="https://www.instagram.com/gabaineoptika/" target="_blank" rel="noopener" title="Instagram">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Oldalak</h4>
+        <a href="#" onclick="showPage('home');return false">Főoldal</a>
+        <a href="#" onclick="showPage('home');setTimeout(()=>document.getElementById('services-section').scrollIntoView({behavior:'smooth'}),120);return false">Szolgáltatások</a>
+        <a href="#" onclick="showPage('book');return false">Időpontfoglalás</a>
+        <a href="#" onclick="showPage('home');setTimeout(()=>document.getElementById('contact-section').scrollIntoView({behavior:'smooth'}),120);return false">Kapcsolat</a>
+      </div>
+      <div class="footer-col">
+        <h4>Elérhetőség</h4>
+        <p>📍 Vinnyica u. 8.<br>Albertirsa, 2730</p>
+        <a href="tel:+36703749235">📞 (70) 374 9235</a>
+        <a href="mailto:gabaine.optika@gmail.com">✉️ gabaine.optika@gmail.com</a>
+        <a href="https://www.facebook.com/gabaineoptika/" target="_blank">👍 Facebook</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Gabainé Optika. Minden jog fenntartva.</span>
+      <span>Albertirsa, Vinnyica u. 8. · 2730</span>
+    </div>
+  </footer>
+
+</div><!-- /home -->
+
+<!-- ═══════════════════════ BOOK ═══════════════════════ -->
+<div id="page-book" class="page">
+  <div class="booking-container">
+    <div class="booking-header">
+      <h1>👁 Időpontfoglalás</h1>
+      <p>Gabainé Optika · Vinnyica u. 8., Albertirsa, 2730</p>
+    </div>
+    <div class="booking-steps">
+      <div class="step-indicator active" id="si-1">1 · Szolgáltatás</div>
+      <div class="step-indicator" id="si-2">2 · Dátum &amp; Idő</div>
+      <div class="step-indicator" id="si-3">3 · Adatok</div>
+      <div class="step-indicator" id="si-4">4 · Megerősítés</div>
+    </div>
+
+    <div class="booking-step active" id="step-1">
+      <div class="step-title">Válasszon szolgáltatást</div>
+      <div class="step-sub">Kattintson a kívánt szolgáltatásra a folytatáshoz.</div>
+      <div class="service-select-grid" id="service-select-grid"></div>
+      <div class="step-actions"><div></div><button class="btn btn-primary" onclick="goStep(2)" id="step1-next" disabled>Tovább →</button></div>
+    </div>
+
+    <div class="booking-step" id="step-2">
+      <div class="step-title">Dátum &amp; Időpont</div>
+      <div class="step-sub">Jelöljön ki egy napot, majd válasszon szabad időpontot.</div>
+      <div class="date-picker">
+        <div>
+          <div class="calendar-widget">
+            <div class="cal-nav">
+              <button class="cal-nav-btn" onclick="changeMonth(-1)">‹</button>
+              <div class="cal-nav-title" id="cal-month-title"></div>
+              <button class="cal-nav-btn" onclick="changeMonth(1)">›</button>
+            </div>
+            <div class="booking-cal-grid" id="booking-calendar"></div>
+          </div>
+        </div>
+        <div class="time-slots">
+          <h3 id="time-slots-header">Először válasszon dátumot</h3>
+          <div class="slots-grid" id="slots-grid"></div>
+        </div>
+      </div>
+      <div class="step-actions">
+        <button class="btn btn-outline" onclick="goStep(1)">← Vissza</button>
+        <button class="btn btn-primary" onclick="goStep(3)" id="step2-next" disabled>Tovább →</button>
+      </div>
+    </div>
+
+    <div class="booking-step" id="step-3">
+      <div class="step-title">Személyes adatok</div>
+      <div class="step-sub">Ezeket az adatokat az időpont visszaigazolásához használjuk.</div>
+      <div class="form-grid">
+        <div class="form-group"><label>Vezetéknév *</label><input type="text" id="f-last" placeholder="Nagy"></div>
+        <div class="form-group"><label>Keresztnév *</label><input type="text" id="f-first" placeholder="Kata"></div>
+        <div class="form-group"><label>E-mail cím *</label><input type="email" id="f-email" placeholder="kata@pelda.hu"></div>
+        <div class="form-group"><label>Telefonszám</label><input type="tel" id="f-phone" placeholder="+36 20 123 4567"></div>
+        <div class="form-group full"><label>Megjegyzés (opcionális)</label><textarea id="f-notes" placeholder="Van-e valami, amit tudnunk kell az időpontjával kapcsolatban?"></textarea></div>
+      </div>
+      <div class="step-actions">
+        <button class="btn btn-outline" onclick="goStep(2)">← Vissza</button>
+        <button class="btn btn-primary" onclick="goStep(4)">Áttekintés →</button>
+      </div>
+    </div>
+
+    <div class="booking-step" id="step-4">
+      <div class="step-title">Áttekintés &amp; megerősítés</div>
+      <div class="step-sub">Kérjük, ellenőrizze adatait az időpont véglegesítése előtt.</div>
+      <div class="confirm-card" id="confirm-summary"></div>
+      <div class="step-actions">
+        <button class="btn btn-outline" onclick="goStep(3)">← Szerkesztés</button>
+        <button class="btn btn-primary" onclick="submitBooking()">✓ Időpont megerősítése</button>
+      </div>
+    </div>
+
+    <div class="booking-step" id="step-5">
+      <div class="success-screen">
+        <div class="success-icon">✓</div>
+        <h2>Időpont elfogadva!</h2>
+        <p>Köszönjük foglalását! Hamarosan találkozunk a Vinnyica utcán. 😊</p>
+        <div class="ref-code" id="ref-code"></div>
+        <div id="success-summary" style="text-align:left;margin-bottom:2rem;max-width:480px;margin-left:auto;margin-right:auto;"></div>
+        <button class="btn btn-primary" onclick="resetBooking();showPage('home')">Vissza a főoldalra</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ ADMIN ═══════════════════════ -->
+<div id="page-admin" class="page">
+  <div class="admin-container">
+    <div id="admin-login-screen">
+      <div class="admin-login">
+        <div class="lock-icon">🔐</div>
+        <h2>Admin belépés</h2>
+        <p>Ez a felület csak bemutató célokra szolgál; ne használja éles adminisztrációs felületként.</p>
+        <input type="text" id="admin-user" placeholder="Felhasználónév" autocomplete="off">
+        <input type="password" id="admin-pass" placeholder="Jelszó" autocomplete="off">
+        <button class="btn-admin" onclick="adminLogin()">Bejelentkezés</button>
+      </div>
+    </div>
+    <div id="admin-dashboard" style="display:none">
+      <div class="admin-header">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div><h1>Időpontok</h1><p>Gabainé Optika · Albertirsa · Foglaláskezelő</p></div>
+          <button class="btn" style="background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.65);border:1px solid rgba(255,255,255,0.12);font-size:0.85rem" onclick="adminLogout()">Kijelentkezés</button>
+        </div>
+      </div>
+      <div class="admin-stats" id="admin-stats"></div>
+      <div class="admin-filter">
+        <button class="filter-btn active" onclick="filterApts('all',this)">Összes</button>
+        <button class="filter-btn" onclick="filterApts('confirmed',this)">Megerősített</button>
+        <button class="filter-btn" onclick="filterApts('cancelled',this)">Lemondott</button>
+      </div>
+      <div class="apt-list" id="apt-list"></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+const SERVICES = [
+  {id:1,icon:'👁️',name:'Szemvizsgálat',desc:'Teljes látásellenőrzés, refrakciós teszt és szemészeti szűrővizsgálat.',duration:'45 perc',price:'8 500 Ft'},
+  {id:2,icon:'🔬',name:'Kontaktlencse-illesztés',desc:'Professzionális illesztés és próba puha vagy merev kontaktlencséhez.',duration:'30 perc',price:'6 000 Ft'},
+  {id:3,icon:'🕶️',name:'Keret-tanácsadás',desc:'Szakértői segítség az Önhöz tökéletesen illő keret kiválasztásában.',duration:'30 perc',price:'4 000 Ft'},
+  {id:4,icon:'👶',name:'Gyermek szemvizsgálat',desc:'Kíméletes és alapos látásvizsgálat 3 éves kortól.',duration:'45 perc',price:'7 000 Ft'},
+  {id:5,icon:'🔭',name:'Glaukóma-szűrés',desc:'Nyomásmérés és látóideg-értékelés a korai felismerés érdekében.',duration:'20 perc',price:'5 500 Ft'},
+  {id:6,icon:'🛠️',name:'Keret-javítás',desc:'Gyors javítás, orrtámasz-csere és keret-beállítás.',duration:'15 perc',price:'2 000 Ft'},
+];
+const TIME_SLOTS = ['9:00','9:30','10:00','10:30','11:00','11:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30'];
+function escapeHTML(str){
+  return String(str||'')
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#39;');
+}
+function getApts(){try{return JSON.parse(localStorage.getItem('gabaine_apts')||'[]');}catch{return[];}}
+function saveApts(a){localStorage.setItem('gabaine_apts',JSON.stringify(a));}
+let booking={service:null,date:null,time:null,first:'',last:'',email:'',phone:'',notes:''};
+let calYear,calMonth,adminLoggedIn=false;
+
+function initParticles(){
+  const w=document.getElementById('particles');
+  const colors=['#f59340','#fde9d0','#e07d28','#ffc48a','#fff0d8'];
+  for(let i=0;i<20;i++){
+    const p=document.createElement('div'); p.className='particle';
+    const s=Math.random()*16+6;
+    p.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}%;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${Math.random()*20+14}s;animation-delay:${Math.random()*15}s;`;
+    w.appendChild(p);
+  }
+}
+
+window.addEventListener('scroll',()=>{
+  document.getElementById('main-nav').classList.toggle('scrolled',window.scrollY>20);
+  document.getElementById('scrollTop').classList.toggle('visible',window.scrollY>300);
+});
+
+function showPage(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('[id^=nav-]').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  const nb=document.getElementById('nav-'+page); if(nb)nb.classList.add('active');
+  if(page==='admin'&&adminLoggedIn)renderAdmin();
+  window.scrollTo(0,0); return false;
+}
+
+function renderHomeServices(){
+  document.getElementById('home-services').innerHTML=SERVICES.map(s=>`
+    <div class="service-card" onclick="bookService(${s.id})">
+      <div class="service-card-top">
+        <div class="service-icon-wrap">${s.icon}</div>
+        <div class="service-badge">${s.duration}</div>
+      </div>
+      <div class="service-name">${s.name}</div>
+      <div class="service-desc">${s.desc}</div>
+      <div class="service-footer">
+        <span class="service-duration">⏱ ${s.duration}</span>
+        <span class="service-price">${s.price}</span>
+        <span class="service-arrow">Foglalás →</span>
+      </div>
+    </div>`).join('');
+}
+
+function bookService(id){
+  booking.service=SERVICES.find(s=>s.id===id);
+  showPage('book');
+  document.querySelectorAll('.service-select-card').forEach(c=>c.classList.remove('selected'));
+  const card=document.querySelector(`.service-select-card[data-id="${id}"]`);
+  if(card)card.classList.add('selected');
+  document.getElementById('step1-next').disabled=false;
+  goStep(1);
+}
+
+function renderServiceSelect(){
+  document.getElementById('service-select-grid').innerHTML=SERVICES.map(s=>`
+    <div class="service-select-card" data-id="${s.id}" onclick="selectService(${s.id},this)">
+      <div class="sscard-icon">${s.icon}</div>
+      <div class="sscard-name">${s.name}</div>
+      <div class="sscard-price">${s.duration} · ${s.price}</div>
+    </div>`).join('');
+}
+
+function selectService(id,el){
+  document.querySelectorAll('.service-select-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  booking.service=SERVICES.find(s=>s.id===id);
+  document.getElementById('step1-next').disabled=false;
+}
+
+function goStep(n){
+  if(n===3&&(!booking.date||!booking.time)){showToast('⚠️ Kérjük, válasszon dátumot és időpontot');return;}
+  if(n===4){
+    booking.last=document.getElementById('f-last').value.trim();
+    booking.first=document.getElementById('f-first').value.trim();
+    booking.email=document.getElementById('f-email').value.trim();
+    booking.phone=document.getElementById('f-phone').value.trim();
+    booking.notes=document.getElementById('f-notes').value.trim();
+    if(!booking.first||!booking.last||!booking.email){showToast('⚠️ Kérjük, töltse ki a kötelező mezőket');return;}
+    renderConfirm();
+  }
+  document.querySelectorAll('.booking-step').forEach(s=>s.classList.remove('active'));
+  document.getElementById('step-'+n).classList.add('active');
+  for(let i=1;i<=4;i++){
+    const si=document.getElementById('si-'+i);
+    si.classList.remove('active','done');
+    if(i===n)si.classList.add('active');
+    else if(i<n)si.classList.add('done');
+  }
+  window.scrollTo({top:70,behavior:'smooth'});
+}
+
+function renderCalendar(){
+  const months=['Január','Február','Március','Április','Május','Június','Július','Augusztus','Szeptember','Október','November','December'];
+  document.getElementById('cal-month-title').textContent=`${months[calMonth]} ${calYear}`;
+  const cal=document.getElementById('booking-calendar');
+  const days=['H','K','Sz','Cs','P','Szo','V'];
+  let html=days.map(d=>`<div class="bcal-day-label">${d}</div>`).join('');
+  const firstDay=(new Date(calYear,calMonth,1).getDay()+6)%7;
+  const dim=new Date(calYear,calMonth+1,0).getDate();
+  const today=new Date();
+  for(let i=0;i<firstDay;i++)html+=`<button class="bcal-day empty"></button>`;
+  for(let d=1;d<=dim;d++){
+    const date=new Date(calYear,calMonth,d);
+    const isPast=date<new Date(today.getFullYear(),today.getMonth(),today.getDate());
+    const isToday=d===today.getDate()&&calMonth===today.getMonth()&&calYear===today.getFullYear();
+    const ds=`${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isSel=booking.date===ds;
+    let cls='bcal-day'+(isPast?' disabled':'')+(isToday?' today-mark':'')+(isSel?' selected':'');
+    html+=`<button class="${cls}" ${isPast?'disabled':''} onclick="selectDate('${ds}')">${d}</button>`;
+  }
+  cal.innerHTML=html;
+}
+
+function changeMonth(dir){
+  calMonth+=dir;
+  if(calMonth<0){calMonth=11;calYear--;}
+  if(calMonth>11){calMonth=0;calYear++;}
+  renderCalendar();
+}
+
+function selectDate(ds){
+  booking.date=ds;booking.time=null;
+  document.getElementById('step2-next').disabled=true;
+  renderCalendar();renderTimeSlots(ds);
+}
+
+function renderTimeSlots(ds){
+  const takenTimes=getApts().filter(a=>a.date===ds&&a.status==='confirmed').map(a=>a.time);
+  const d=new Date(ds+'T12:00:00');
+  const days=['Vasárnap','Hétfő','Kedd','Szerda','Csütörtök','Péntek','Szombat'];
+  const mos=['jan.','feb.','már.','ápr.','máj.','jún.','júl.','aug.','szep.','okt.','nov.','dec.'];
+  document.getElementById('time-slots-header').textContent=`${days[d.getDay()]}, ${d.getFullYear()}. ${mos[d.getMonth()]} ${d.getDate()}.`;
+  document.getElementById('slots-grid').innerHTML=TIME_SLOTS.map(t=>{
+    const taken=takenTimes.includes(t),sel=booking.time===t;
+    return `<div class="time-slot ${taken?'taken':''} ${sel?'selected':''}" onclick="${taken?'':'pickTime(\''+t+'\')'}"> ${t}${taken?' (foglalt)':''}</div>`;
+  }).join('');
+}
+
+function pickTime(t){
+  booking.time=t;
+  document.getElementById('step2-next').disabled=false;
+  if(booking.date)renderTimeSlots(booking.date);
+  showToast('✓ '+t+' kiválasztva');
+}
+
+function renderConfirm(){
+  const d=new Date(booking.date+'T12:00:00');
+  const days=['Vasárnap','Hétfő','Kedd','Szerda','Csütörtök','Péntek','Szombat'];
+  const mos=['január','február','március','április','május','június','július','augusztus','szeptember','október','november','december'];
+  document.getElementById('confirm-summary').innerHTML=`
+    <div class="confirm-title">Időpont összegzése</div>
+    <div class="confirm-row"><span>Szolgáltatás</span><strong>${escapeHTML(booking.service.icon)} ${escapeHTML(booking.service.name)}</strong></div>
+    <div class="confirm-row"><span>Dátum</span><strong>${days[d.getDay()]}, ${d.getFullYear()}. ${mos[d.getMonth()]} ${d.getDate()}.</strong></div>
+    <div class="confirm-row"><span>Időpont</span><strong>${escapeHTML(booking.time)}</strong></div>
+    <div class="confirm-row"><span>Időtartam</span><strong>${escapeHTML(booking.service.duration)}</strong></div>
+    <div class="confirm-row"><span>Ár</span><strong>${escapeHTML(booking.service.price)}</strong></div>
+    <div class="confirm-row"><span>Név</span><strong>${escapeHTML(booking.last)} ${escapeHTML(booking.first)}</strong></div>
+    <div class="confirm-row"><span>E-mail</span><strong>${escapeHTML(booking.email)}</strong></div>
+    ${booking.phone?`<div class="confirm-row"><span>Telefon</span><strong>${escapeHTML(booking.phone)}</strong></div>`:''}
+    ${booking.notes?`<div class="confirm-row"><span>Megjegyzés</span><strong>${escapeHTML(booking.notes)}</strong></div>`:''}`;
+}
+
+function submitBooking(){
+  const ref='GO-'+Math.random().toString(36).substring(2,8).toUpperCase();
+  const apt={id:ref,service:booking.service.name,serviceIcon:booking.service.icon,
+    date:booking.date,time:booking.time,duration:booking.service.duration,price:booking.service.price,
+    first:booking.first,last:booking.last,email:booking.email,phone:booking.phone,
+    notes:booking.notes,status:'confirmed',createdAt:new Date().toISOString()};
+  const apts=getApts();apts.push(apt);saveApts(apts);
+  const d=new Date(booking.date+'T12:00:00');
+  const mos=['jan.','feb.','már.','ápr.','máj.','jún.','júl.','aug.','szep.','okt.','nov.','dec.'];
+  document.getElementById('ref-code').textContent='Hivatkozási szám: '+ref;
+  document.getElementById('success-summary').innerHTML=`
+    <div class="confirm-card">
+      <div class="confirm-row"><span>Szolgáltatás</span><strong>${escapeHTML(booking.service.icon)} ${escapeHTML(booking.service.name)}</strong></div>
+      <div class="confirm-row"><span>Dátum és idő</span><strong>${d.getFullYear()}. ${mos[d.getMonth()]} ${d.getDate()}. — ${escapeHTML(booking.time)}</strong></div>
+      <div class="confirm-row"><span>Időtartam</span><strong>${escapeHTML(booking.service.duration)}</strong></div>
+      <div class="confirm-row"><span>Ár</span><strong>${escapeHTML(booking.service.price)}</strong></div>
+      <div class="confirm-row"><span>Helyszín</span><strong>📍 Vinnyica u. 8., Albertirsa</strong></div>
+    </div>`;
+  goStep(5);
+}
+
+function resetBooking(){
+  booking={service:null,date:null,time:null,first:'',last:'',email:'',phone:'',notes:''};
+  ['f-first','f-last','f-email','f-phone','f-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('step1-next').disabled=true;
+  document.getElementById('step2-next').disabled=true;
+  document.getElementById('slots-grid').innerHTML='';
+  document.getElementById('time-slots-header').textContent='Először válasszon dátumot';
+  document.querySelectorAll('.service-select-card').forEach(c=>c.classList.remove('selected'));
+  const now=new Date();calYear=now.getFullYear();calMonth=now.getMonth();
+  renderCalendar();goStep(1);
+}
+
+function adminLogin(){
+  if(document.getElementById('admin-user').value==='admin'&&document.getElementById('admin-pass').value==='admin123'){
+    adminLoggedIn=true;
+    document.getElementById('admin-login-screen').style.display='none';
+    document.getElementById('admin-dashboard').style.display='block';
+    renderAdmin();
+  }else{showToast('❌ Helytelen belépési adatok');}
+}
+function adminLogout(){
+  adminLoggedIn=false;
+  document.getElementById('admin-login-screen').style.display='block';
+  document.getElementById('admin-dashboard').style.display='none';
+}
+function renderAdmin(){
+  const apts=getApts();
+  const confirmed=apts.filter(a=>a.status==='confirmed').length;
+  const revenue=apts.filter(a=>a.status==='confirmed').reduce((s,a)=>s+parseInt((a.price||'0').replace(/[^0-9]/g,'')),0);
+  document.getElementById('admin-stats').innerHTML=`
+    <div class="stat-card"><div class="stat-value stat-accent">${confirmed}</div><div class="stat-label">Megerősített</div></div>
+    <div class="stat-card"><div class="stat-value">${apts.length}</div><div class="stat-label">Összes foglalás</div></div>
+    <div class="stat-card"><div class="stat-value stat-accent">${revenue.toLocaleString('hu-HU')} Ft</div><div class="stat-label">Bevétel (becsült)</div></div>`;
+  renderAptList(apts);
+}
+function filterApts(f,btn){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const apts=getApts();
+  renderAptList(f==='all'?apts:apts.filter(a=>a.status===f));
+}
+function renderAptList(apts){
+  const list=document.getElementById('apt-list');
+  if(!apts.length){list.innerHTML=`<div class="no-apts"><div class="empty-icon">📭</div><p>Nem található időpont</p></div>`;return;}
+  const mos=['jan.','feb.','már.','ápr.','máj.','jún.','júl.','aug.','szep.','okt.','nov.','dec.'];
+  list.innerHTML=[...apts].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).map(a=>{
+    const d=new Date(a.date+'T12:00:00');
+    const ds=`${d.getFullYear()}. ${mos[d.getMonth()]} ${d.getDate()}.`;
+    const sh=a.status==='confirmed'?'megerősített':'lemondott';
+    return `<div class="apt-row">
+      <div><div class="client-name">${escapeHTML(a.last)} ${escapeHTML(a.first)}</div><div class="client-email">${escapeHTML(a.email)}</div></div>
+      <div><div class="apt-service">${escapeHTML(a.serviceIcon)} ${escapeHTML(a.service)}</div><div style="font-size:0.77rem;color:rgba(255,255,255,0.33);margin-top:2px">${escapeHTML(a.duration)} · ${escapeHTML(a.price)}</div></div>
+      <div class="apt-datetime"><span>${ds}</span><span class="apt-time">${escapeHTML(a.time)}</span><span class="status-badge status-${escapeHTML(a.status)}">${escapeHTML(sh)}</span></div>
+      <div style="display:flex;flex-direction:column;gap:0.4rem;align-items:flex-end">
+        <div style="font-size:0.7rem;color:rgba(255,255,255,0.22);font-family:monospace">${escapeHTML(a.id)}</div>
+        ${a.status==='confirmed'?`<button class="cancel-btn" onclick="cancelApt('${escapeHTML(a.id)}')">Lemondás</button>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+function cancelApt(id){
+  if(!confirm('Biztosan le szeretné mondani ezt az időpontot?'))return;
+  const apts=getApts(),idx=apts.findIndex(a=>a.id===id);
+  if(idx!==-1){apts[idx].status='cancelled';saveApts(apts);}
+  renderAdmin();showToast('✓ Időpont lemondva');
+}
+
+let toastT;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+// INIT
+initParticles();
+renderHomeServices();
+renderServiceSelect();
+const now=new Date();calYear=now.getFullYear();calMonth=now.getMonth();
+renderCalendar();
+</script>
+</body>
+</html>
