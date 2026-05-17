@@ -393,7 +393,7 @@ footer { background: var(--ink); color: rgba(255,255,255,0.55); padding: 3.5rem 
     <button class="nav-btn active" id="nav-home" onclick="showPage('home')">Főoldal</button>
     <button class="nav-btn" onclick="showPage('home'); setTimeout(()=>document.getElementById('services-section').scrollIntoView({behavior:'smooth'}),120)">Szolgáltatások</button>
     <button class="nav-btn" onclick="showPage('home'); setTimeout(()=>document.getElementById('contact-section').scrollIntoView({behavior:'smooth'}),120)">Kapcsolat</button>
-    <!-- Admin panel is disabled for static public deployment -->
+    <button class="nav-btn" id="nav-admin" onclick="showPage('admin')">🔐 Admin</button>
     <button class="nav-book-btn" onclick="showPage('book')">🗓 Időpontfoglalás</button>
   </div>
 </nav>
