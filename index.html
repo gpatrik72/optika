@@ -8,6 +8,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
+  --topbar-height: 46px;
+  --nav-height: 70px;
   --orange: #f59340;
   --orange-dark: #e07d28;
   --orange-light: #fde9d0;
@@ -39,11 +41,37 @@ body { font-family: 'Inter', sans-serif; background: var(--cream); color: var(--
 
 /* NAV */
 nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  position: fixed; top: var(--topbar-height); left: 0; right: 0; z-index: 200;
   background: rgba(255,250,245,0.94); backdrop-filter: blur(18px);
   border-bottom: 1px solid var(--border);
   display: flex; align-items: center; justify-content: space-between;
-  padding: 0 2.5rem; height: 70px; transition: box-shadow 0.3s;
+  padding: 0 2.5rem; height: var(--nav-height); transition: box-shadow 0.3s;
+}
+.top-bar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 210;
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 1rem; min-height: var(--topbar-height); padding: 0 2.5rem;
+  background: rgba(255,250,245,0.92);
+  border-bottom: 1px solid rgba(240,220,200,0.75);
+  font-size: 0.88rem; color: var(--ink);
+}
+.top-bar-left,
+.top-bar-right {
+  display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+}
+.top-bar span {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  color: var(--muted);
+}
+.top-bar a.top-link {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.35rem 0.95rem; border-radius: 999px;
+  background: rgba(245,147,64,0.12); color: var(--ink);
+  text-decoration: none;
+  font-weight: 600;
+}
+.top-bar a.top-link:hover {
+  background: rgba(245,147,64,0.18);
 }
 nav.scrolled { box-shadow: 0 2px 20px rgba(245,147,64,0.12); }
 .nav-logo {
@@ -81,7 +109,7 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(245,147,64,0.12); }
 /* HERO */
 .hero {
   min-height: 100vh; display: flex; align-items: center;
-  position: relative; overflow: hidden; padding-top: 70px;
+  position: relative; overflow: hidden; padding-top: calc(var(--topbar-height) + var(--nav-height));
 }
 .hero-bg {
   position: absolute; inset: 0;
@@ -139,23 +167,82 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(245,147,64,0.12); }
 .btn-outline:hover { border-color: var(--orange); color: var(--orange-dark); background: var(--orange-lighter); }
 
 /* HERO VISUAL */
-.hero-visual { position: relative; height: 440px; animation: fadeUp 0.8s 0.25s ease both; }
-.eye-svg-wrap { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 300px; height: 180px; }
-.eye-svg-wrap svg { width: 100%; height: 100%; overflow: visible; }
-.float-card {
-  position: absolute; background: white; border-radius: 16px; padding: 1rem 1.2rem;
-  box-shadow: 0 12px 40px rgba(245,147,64,0.18); border: 1px solid var(--border); white-space: nowrap;
+.hero-visual { display: flex; align-items: center; justify-content: center; animation: fadeUp 0.8s 0.25s ease both; }
+.hero-card {
+  width: 100%; max-width: 520px;
+  background: white;
+  border-radius: 32px;
+  padding: 2rem;
+  border: 1px solid rgba(240,220,200,0.7);
+  box-shadow: 0 24px 60px rgba(34,27,22,0.08);
 }
-.float-card-1 { top: 4%; right: 0; animation: float1 5s ease-in-out infinite; }
-.float-card-2 { bottom: 8%; left: -15px; animation: float2 6s ease-in-out infinite; }
-.float-card-3 { top: 43%; right: -10px; animation: float1 7s 1.2s ease-in-out infinite; }
-@keyframes float1 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
-@keyframes float2 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(8px)} }
-.float-card .fc-label { font-size: 0.68rem; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em; }
-.float-card .fc-value { font-size: 0.92rem; font-weight: 700; color: var(--ink); margin-top: 2px; }
-.float-card .fc-icon { font-size: 1.25rem; margin-bottom: 0.25rem; }
-.fc-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; }
-.fc-dot.green { background: #34c769; box-shadow: 0 0 6px rgba(52,199,105,0.5); }
+.hero-card-eyebrow {
+  display: inline-flex;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--orange-dark);
+  font-weight: 700;
+  font-size: 0.78rem;
+  margin-bottom: 1rem;
+}
+.hero-card h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+  margin-bottom: 1.1rem;
+  line-height: 1.05;
+}
+.hero-card p {
+  color: var(--muted);
+  line-height: 1.8;
+  margin-bottom: 1.8rem;
+}
+.hero-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.9rem;
+}
+.hero-list li {
+  position: relative;
+  padding-left: 1.35rem;
+  color: var(--ink);
+  line-height: 1.7;
+}
+.hero-list li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  top: 0.1rem;
+  color: var(--orange);
+  font-size: 1.2rem;
+  line-height: 1;
+}
+.hero-highlights {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  max-width: 1100px;
+  margin: 2rem auto 0;
+  padding: 0 2.5rem 3rem;
+}
+.highlight-card {
+  background: white;
+  border-radius: 24px;
+  padding: 1.8rem 1.75rem;
+  border: 1px solid rgba(240,220,200,0.9);
+  box-shadow: 0 18px 40px rgba(34,27,22,0.07);
+}
+.highlight-card strong {
+  display: block;
+  margin-bottom: 1rem;
+  font-size: 1.05rem;
+}
+.highlight-card p {
+  color: var(--muted);
+  line-height: 1.7;
+  margin: 0;
+}
 
 /* TRUST STRIP */
 .trust-strip { background: var(--orange-light); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 1.2rem 2.5rem; }
@@ -371,7 +458,16 @@ footer { background: var(--ink); color: rgba(255,255,255,0.55); padding: 3.5rem 
   .form-group.full { grid-column: 1; }
   .apt-row { grid-template-columns: 1fr 1fr; }
   .admin-stats { grid-template-columns: 1fr 1fr; }
-  nav { padding: 0 1.2rem; }
+  .top-bar {
+    padding: 0.75rem 1.2rem;
+    flex-direction: column;
+    align-items: flex-start;
+    min-height: auto;
+  }
+  .top-bar-left, .top-bar-right { width: 100%; justify-content: flex-start; }
+  .top-bar-right { gap: 0.75rem; }
+  nav { top: 78px; padding: 0 1.2rem; }
+  .hero { padding-top: calc(78px + var(--nav-height)); }
   .footer-inner { grid-template-columns: 1fr; gap: 2rem; }
   .footer-bottom { flex-direction: column; gap: 0.5rem; text-align: center; }
   .section { padding: 3.5rem 1.5rem; }
@@ -382,6 +478,19 @@ footer { background: var(--ink); color: rgba(255,255,255,0.55); padding: 3.5rem 
 <body>
 
 <div class="particles" id="particles"></div>
+
+<div class="top-bar">
+  <div class="top-bar-left">
+    <span>📍 2730 Albertirsa, Vinyica utca 8.</span>
+    <span>📞 +36 70 374 9235</span>
+    <span>📍 2700 Cegléd, Ősz utca 17.</span>
+    <span>✉️ gabaine.optika@gmail.com</span>
+  </div>
+  <div class="top-bar-right">
+    <a class="top-link" href="https://www.facebook.com/gabaineoptika/" target="_blank" rel="noopener">Facebook</a>
+    <a class="top-link" href="https://www.instagram.com/gabaineoptika/" target="_blank" rel="noopener">Instagram</a>
+  </div>
+</div>
 
 <!-- NAV -->
 <nav id="main-nav">
@@ -419,98 +528,41 @@ footer { background: var(--ink); color: rgba(255,255,255,0.55); padding: 3.5rem 
 
     <div class="hero-inner">
       <div class="hero-content">
-        <div class="hero-tag">✦ Albertirsa · Vinnyica u. 8.</div>
-        <h1>Látásszakértők<br><em>szívvel és tudással</em></h1>
-        <div class="hero-slogan">„Láss, ne csak nézz! Szem előtt az éleslátás!"</div>
-        <p>Minőségi szemüvegkeretek, szemüveglencsék és kontaktlencsék — személyre szabva. Látogasson el hozzánk Albertirsán!</p>
+        <div class="hero-tag">Online időpontfoglalás</div>
+        <h1>Online időpontfoglalás<br>szemvizsgálatra</h1>
+        <div class="hero-slogan">Foglalj időpontot időben. A foglalásod e-mailben igazoljuk vissza.</div>
+        <p>A legmodernebb vizsgálóeszközökkel és személyre szabott tanácsadással segítjük, hogy te jól láss és jól érezd magad.</p>
         <div class="hero-actions">
-          <button class="btn btn-primary" onclick="showPage('book')">🗓 Időpontfoglalás</button>
-          <button class="btn btn-outline" onclick="showPage('home'); setTimeout(()=>document.getElementById('contact-section').scrollIntoView({behavior:'smooth'}),120)">📍 Elérhetőségek</button>
+          <button class="btn btn-primary" onclick="showPage('book')">Időpont foglalása</button>
+          <button class="btn btn-outline" onclick="showPage('home'); setTimeout(()=>document.getElementById('services-section').scrollIntoView({behavior:'smooth'}),120)">Szolgáltatások</button>
         </div>
       </div>
 
       <div class="hero-visual">
-        <!-- Animated SVG Eye -->
-        <div class="eye-svg-wrap">
-          <svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <radialGradient id="irisGrad" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stop-color="#fbb26a"/>
-                <stop offset="60%" stop-color="#f59340"/>
-                <stop offset="100%" stop-color="#e07d28"/>
-              </radialGradient>
-              <radialGradient id="bgGrad" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stop-color="#ffffff"/>
-                <stop offset="100%" stop-color="#fff8f0"/>
-              </radialGradient>
-              <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
-                <feGaussianBlur stdDeviation="5" result="blur"/>
-                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-              </filter>
-              <clipPath id="eyeClip">
-                <path d="M 20 90 Q 160 0 300 90 Q 160 180 20 90 Z"/>
-              </clipPath>
-            </defs>
-            <!-- Eye white -->
-            <path d="M 20 90 Q 160 0 300 90 Q 160 180 20 90 Z" fill="url(#bgGrad)" stroke="#f0dcc8" stroke-width="2.5"/>
-            <!-- Iris glow -->
-            <circle cx="160" cy="90" r="56" fill="url(#irisGrad)" filter="url(#glow)" clip-path="url(#eyeClip)"/>
-            <!-- Iris texture rings -->
-            <circle cx="160" cy="90" r="44" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="2" clip-path="url(#eyeClip)"/>
-            <circle cx="160" cy="90" r="30" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1.5" clip-path="url(#eyeClip)"/>
-            <!-- Iris spokes -->
-            <g opacity="0.15" clip-path="url(#eyeClip)">
-              <line x1="160" y1="34" x2="160" y2="90" stroke="white" stroke-width="1.2"/>
-              <line x1="160" y1="90" x2="160" y2="146" stroke="white" stroke-width="1.2"/>
-              <line x1="104" y1="57" x2="160" y2="90" stroke="white" stroke-width="1.2"/>
-              <line x1="160" y1="90" x2="216" y2="123" stroke="white" stroke-width="1.2"/>
-              <line x1="104" y1="123" x2="160" y2="90" stroke="white" stroke-width="1.2"/>
-              <line x1="160" y1="90" x2="216" y2="57" stroke="white" stroke-width="1.2"/>
-            </g>
-            <!-- Pupil -->
-            <circle cx="160" cy="90" r="22" fill="#1c1410" clip-path="url(#eyeClip)"/>
-            <!-- Pupil animate -->
-            <circle cx="160" cy="90" r="22" fill="#1c1410" clip-path="url(#eyeClip)">
-              <animate attributeName="r" values="22;19;22" dur="4s" repeatCount="indefinite"/>
-            </circle>
-            <!-- Highlights -->
-            <circle cx="150" cy="80" r="7" fill="white" opacity="0.75" clip-path="url(#eyeClip)"/>
-            <circle cx="168" cy="99" r="3.5" fill="white" opacity="0.4" clip-path="url(#eyeClip)"/>
-            <!-- Blink -->
-            <path d="M 20 90 Q 160 0 300 90" fill="url(#bgGrad)">
-              <animate attributeName="d" values="M 20 90 Q 160 0 300 90;M 20 90 Q 160 90 300 90;M 20 90 Q 160 0 300 90" keyTimes="0;0.5;1" dur="0.18s" begin="5s;11s;17s" fill="freeze"/>
-            </path>
-            <path d="M 20 90 Q 160 180 300 90" fill="url(#bgGrad)">
-              <animate attributeName="d" values="M 20 90 Q 160 180 300 90;M 20 90 Q 160 90 300 90;M 20 90 Q 160 180 300 90" keyTimes="0;0.5;1" dur="0.18s" begin="5s;11s;17s" fill="freeze"/>
-            </path>
-            <!-- Lashes -->
-            <g stroke="#c8a07a" stroke-width="1.8" stroke-linecap="round" opacity="0.5">
-              <line x1="75" y1="51" x2="70" y2="36"/><line x1="108" y1="28" x2="106" y2="13"/>
-              <line x1="143" y1="14" x2="143" y2="0"/><line x1="178" y1="14" x2="180" y2="0"/>
-              <line x1="212" y1="28" x2="217" y2="13"/><line x1="243" y1="51" x2="249" y2="37"/>
-            </g>
-          </svg>
-        </div>
-
-        <!-- Floating info cards -->
-        <div class="float-card float-card-1">
-          <div class="fc-icon">🏆</div>
-          <div class="fc-label">Tapasztalat</div>
-          <div class="fc-value">Megbízható szakértelem</div>
-        </div>
-        <div class="float-card float-card-2">
-          <span class="fc-dot green"></span>
-          <span style="font-size:0.85rem;font-weight:700;vertical-align:middle">Nyitva vagyunk</span><br>
-          <span style="font-size:0.77rem;color:var(--muted);display:block;margin-top:3px">Hétfő – Péntek</span>
-        </div>
-        <div class="float-card float-card-3">
-          <div class="fc-icon">👓</div>
-          <div class="fc-label">Keretek &amp; Lencsék</div>
-          <div class="fc-value">Széles választék</div>
+        <div class="hero-card">
+          <div class="hero-card-eyebrow">Több mint 20 év szakértelem</div>
+          <h3>Teljes körű látásvizsgálat és szemüvegkészítés</h3>
+          <p>Minőségi keretek, precíz lencsék és figyelmes kiszolgálás, hogy Ön mindig jól lásson és jól érezze magát.</p>
+          <ul class="hero-list">
+            <li>Szemvizsgálat profi mérőeszközökkel</li>
+            <li>Keret- és lencseajánlat személyre szabva</li>
+            <li>Gyors kontaktlencse illesztés</li>
+          </ul>
         </div>
       </div>
     </div>
   </section>
+
+  <div class="hero-highlights">
+    <div class="highlight-card">
+      <strong>Nyitvatartás</strong>
+      <p>H 12:30–18:30<br>K-P 8:30–17:00<br>Sz 8:30–12:00</p>
+    </div>
+    <div class="highlight-card">
+      <strong>Helyszín</strong>
+      <p>2730 Albertirsa<br>Vinnyica u. 8.<br><br>2700 Cegléd<br>Ősz utca 17.</p>
+    </div>
+  </div>
 
   <!-- TRUST STRIP -->
   <div class="trust-strip">
