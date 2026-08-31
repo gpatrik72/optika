@@ -1,0 +1,4 @@
+# Keep repo-hosted media tracked so GitHub URLs work reliably
+# If you want to exclude truly local-only files, add a separate folder here.
+.DS_Store
+Thumbs.db

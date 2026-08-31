@@ -134,21 +134,11 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(245,147,64,0.12); }
 }
 /* Blinking Eyelids */
 #eyelid-top, #eyelid-bottom {
-  transition: none !important;
-  animation: none !important;
+  transition: d 0.4s ease;
 }
 /* HERO VISUAL */
 .hero-visual { position:relative; height:40px; animation:fadeUp .8s .25s ease both; }
 .eye-svg-wrap { position:absolute; top:15%; left:70%; transform:translate(-30%,-10%); width:300px; height:180px;  }
-.eye-svg-wrap[data-eye-disabled="true"] {
-  pointer-events: none;
-  opacity: 0.9;
-}
-.eye-svg-wrap[data-eye-disabled="true"] #eyelid-top,
-.eye-svg-wrap[data-eye-disabled="true"] #eyelid-bottom {
-  transition: none !important;
-  animation: none !important;
-}
 .eye-svg-wrap svg { width:100%; height:100%; overflow:visible; }
 .float-card {
   position:absolute; background:white; border-radius:16px; padding:1rem 1.2rem;
@@ -405,76 +395,9 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(245,147,64,0.12); }
 }
 
 .banner-section {
-  max-width: 1100px;
+  max-width: 1800px;
   margin: 2.5rem auto 1rem;
   padding: 0 2.5rem;
-}
-.about-panel {
-  background: rgba(255,255,255,0.82);
-  border: 1px solid var(--border);
-  border-radius: 28px;
-  box-shadow: 0 18px 40px rgba(34,27,22,0.08);
-  padding: 2rem 1.9rem;
-  align-self: center;
-}
-.about-panel .section-eyebrow {
-  margin-bottom: 0.8rem;
-}
-.about-panel h3 {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(2rem, 2.7vw, 2.7rem);
-  line-height: 1.08;
-  margin: 0 0 1rem;
-}
-.about-panel p {
-  color: var(--muted);
-  font-size: 0.98rem;
-  line-height: 1.75;
-  margin: 0 0 1.2rem;
-}
-.about-points {
-  list-style: none;
-  display: grid;
-  gap: 0.7rem;
-  margin: 0 0 1.5rem;
-}
-.about-points li {
-  position: relative;
-  padding-left: 1.3rem;
-  color: var(--ink);
-  line-height: 1.6;
-}
-.about-points li::before {
-  content: '•';
-  position: absolute;
-  left: 0;
-  top: 0;
-  color: var(--orange);
-  font-size: 1.3rem;
-}
-.about-metrics {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.8rem;
-}
-.about-metric {
-  background: var(--orange-lighter);
-  border: 1px solid rgba(245,147,64,0.18);
-  border-radius: 16px;
-  padding: 0.9rem 0.7rem;
-  text-align: center;
-}
-.about-metric strong {
-  display: block;
-  color: var(--orange-dark);
-  font-size: 1.3rem;
-  margin-bottom: 0.2rem;
-}
-.about-metric span {
-  display: block;
-  color: var(--muted);
-  font-size: 0.72rem;
-  line-height: 1.4;
 }
 .banner-heading {
   display: flex;
@@ -503,11 +426,9 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(245,147,64,0.12); }
 }
 .banner-card {
   position: relative;
-  flex: 0 0 100%;
-  width: 100%;
-  min-width: 0;
-  max-width: 100%;
-  height: 100%;
+  min-width: 620px;
+  width: calc(60% - 0.5rem);
+  max-width: 1254px;
   border-radius: 28px;
   overflow: hidden;
   border: 1px solid rgba(28,20,16,0.08);
@@ -516,13 +437,10 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(245,147,64,0.12); }
   background: white;
 }
 .banner-card img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  object-position: center;
+   width: 100%;
+  height: 600px;
+  object-fit: cover;
   display: block;
-  background: #f7efe7;
-  max-width: 100%;
 }
 .banner-card-content {
   position: absolute;
@@ -544,33 +462,20 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(245,147,64,0.12); }
   line-height: 1.5;
   margin: 0;
 }
-.banner-slideshow {
-  position: relative;
-  width: min(100%, 1000px);
-  height: clamp(300px, 30vw, 520px);
-  margin: 0 auto;
-  border-radius: 22px;
-  overflow: hidden;
-  background: #f7efe7;
-}
-.banner-slides {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  transition: transform 0.5s ease;
-}
+.banner-slideshow { position: relative; width: 100%; height: 600px;  max-width: 1400px; border-radius: 28px; overflow: hidden; }
+.banner-slides { display: flex; transition: transform 0.5s ease; }
 .banner-card { min-width: 100%; flex-shrink: 0; }
 .slide-btn {
   position: absolute; top: 50%; transform: translateY(-50%);
-  background: rgba(255,255,255,0.9); border: none; border-radius: 50%;
-  width: 56px; height: 56px; font-size: 1.4rem; cursor: pointer;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.12); transition: all 0.18s;
+  background: rgba(255,255,255,0.85); border: none; border-radius: 50%;
+  width: 44px; height: 44px; font-size: 1.2rem; cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: all 0.2s;
 }
 .slide-btn:hover { background: white; transform: translateY(-50%) scale(1.08); }
 .slide-btn.prev { left: 1rem; }
 .slide-btn.next { right: 1rem; }
 .slide-dots { position: absolute; bottom: 1rem; left: 50%; transform: translateX(-50%); display: flex; gap: 0.5rem; }
-.dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.55); cursor: pointer; transition: background 0.18s; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.5); cursor: pointer; transition: background 0.2s; }
 .dot.active { background: white; }
 .banner-scroll::-webkit-scrollbar {
   height: 8px;
@@ -583,18 +488,13 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(245,147,64,0.12); }
   background: rgba(245,147,64,0.45);
   border-radius: 999px;
 }
-@media (max-width: 1024px) {
-  .banner-section { max-width: 920px; }
-  .banner-slideshow { height: clamp(260px, 35vw, 480px); }
-}
 @media (max-width: 820px) {
-  .banner-slideshow { height: 420px; }
+  .banner-slideshow { height: 350px; } /* shorter on tablets */
 }
 @media (max-width: 480px) {
-  .banner-slideshow { height: 320px; }
+  .banner-slideshow { height: 250px; } /* shorter on phones */
   .banner-section { padding: 0 1rem; }
   .banner-heading { flex-direction: column; align-items: flex-start; }
-  .slide-btn { width: 44px; height: 44px; font-size: 1.1rem; }
 }
 
 /* ── BOOKING PAGE ── */
@@ -980,7 +880,7 @@ footer { background: var(--ink); color: rgba(255,255,255,0.55); padding: 3.5rem 
   <section class="hero">
     <div class="hero-bg"></div>
 
-    <div class="eye-svg-wrap" data-eye-disabled="true" aria-hidden="true">
+     <div class="eye-svg-wrap">
           <svg viewBox="-30 0 320 180" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <radialGradient id="irisGrad" cx="50%" cy="50%" r="50%">
@@ -1036,23 +936,11 @@ footer { background: var(--ink); color: rgba(255,255,255,0.55); padding: 3.5rem 
         <div class="banner-slideshow">
   <div class="banner-slides">
     <article class="banner-card active">
-      <img src="https://raw.githubusercontent.com/gpatrik72/optika/main/kepek/kontaklense.jpg" alt="Kontaktlencse illesztés" />
+      <img src="kepek/kontaklense.jpg" alt="Kontaktlencse illesztés" />
       <div class="banner-card-content"></div>
     </article>
     <article class="banner-card">
-      <img src="https://raw.githubusercontent.com/gpatrik72/optika/main/kepek/szereszemszed.jpg" alt="Szemüveg készítés" />
-      <div class="banner-card-content"></div>
-    </article>
-    <article class="banner-card">
-      <img src="https://raw.githubusercontent.com/gpatrik72/optika/main/kepek/aug20.jpg" alt="aug20" />
-      <div class="banner-card-content"></div>
-    </article>
-    <article class="banner-card">
-      <img src="https://raw.githubusercontent.com/gpatrik72/optika/main/kepek/potszem.jpg" alt="Potszem" />
-      <div class="banner-card-content"></div>
-    </article>
-    <article class="banner-card">
-      <img src="https://raw.githubusercontent.com/gpatrik72/optika/main/kepek/bocskei.jpg" alt="Bocskei" />
+      <img src="kepek/szereszemszed.jpg" alt="Szemüveg készítés" />
       <div class="banner-card-content"></div>
     </article>
   </div>
@@ -1061,49 +949,10 @@ footer { background: var(--ink); color: rgba(255,255,255,0.55); padding: 3.5rem 
   <div class="slide-dots">
     <span class="dot active"></span>
     <span class="dot"></span>
-    <span class="dot"></span>
-    <span class="dot"></span>
-    <span class="dot"></span>
   </div>
 </div>
-<!--REGI           <div class="banner-scroll">
-            <article class="banner-card">
-              <img src="kepek/kontaklense.jpg" alt="Kontaktlencse illesztés" />
-              <div class="banner-card-content">
-              </div>
-          </article>
-          <article class="banner-card">
-            <img src="kepek/szereszemszed.jpg" alt="Szemüveg készítés" />
-            <div class="banner-card-content">
-            </div>
-          </article>
-        </div> -->
-      </section>
 
-      <aside class="about-panel" aria-label="Rólunk">
-        <div class="section-eyebrow">Rólunk</div>
-        <h3>Az optika, ahol a látás és a bizalom egyaránt számít.</h3>
-        <p>Gabainé Optika családias hangulatú, professzionális szemészeti és optikai szolgáltatásokat kínál Albertirsán és Cegléd környékén. Minden ügyfél esetén arra törekszünk, hogy megfelelően megértsük a látásproblémát, és a legjobb megoldást kínáljuk a mindennapi komfort és a tartós elégedettség szempontjából.</p>
-        <ul class="about-points">
-          <li>Szemvizsgálat, kontaktlencse-illesztés és egyéni szemüveg ajánlás.</li>
-          <li>Modern technológia, személyre szabott tanácsadás és kedves ügyfélszolgálat.</li>
-          <li>Évek óta építjük a bizalmat, a precizitást és a magas színvonalú ellátást.</li>
-        </ul>
-        <div class="about-metrics">
-          <div class="about-metric">
-            <strong>20+</strong>
-            <span>éves tapasztalat</span>
-          </div>
-          <div class="about-metric">
-            <strong>2</strong>
-            <span>üzlethelyszín</span>
-          </div>
-          <div class="about-metric">
-            <strong>100%</strong>
-            <span>személyre szabott</span>
-          </div>
-        </div>
-      </aside>
+      </section>
     </div>
   </section>
 
@@ -1282,7 +1131,7 @@ footer { background: var(--ink); color: rgba(255,255,255,0.55); padding: 3.5rem 
   <div class="booking-container">
     <div class="booking-header">
       <h1 id="book-header-title">👁 Időpontfoglalás</h1>
-      <p id="book-header-sub">Gabainé Optika/p>
+      <p id="book-header-sub">Gabainé Optika</p>
     </div>
 
     <div class="booking-steps">
@@ -1394,7 +1243,8 @@ footer { background: var(--ink); color: rgba(255,255,255,0.55); padding: 3.5rem 
       <div class="admin-stats" id="admin-stats"></div>
       <div class="admin-filter">
         <button class="filter-btn active" onclick="filterApts('all',this)">Összes</button>
-        <button class="filter-btn" onclick="filterApts('confirmed',this)">Megerősített</button>
+        <button class="filter-btn" onclick="filterApts('pending',this)">Függőben</button>
+        <button class="filter-btn" onclick="filterApts('accepted',this)">Elfogadott</button>
         <button class="filter-btn" onclick="filterApts('cancelled',this)">Lemondott</button>
       </div>
       <div class="apt-list" id="apt-list"></div>
@@ -1422,14 +1272,10 @@ const SERVICES = [
 ];
 const TIME_SLOTS = ['9:00','9:30','10:00','10:30','11:00','11:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30'];
 
-// ── STORAGE ────────────────────────────────────────────────────────────────
-function getApts(){try{return JSON.parse(localStorage.getItem('gabaine_apts')||'[]');}catch{return[];}}
-function saveApts(a){localStorage.setItem('gabaine_apts',JSON.stringify(a));}
 
 // ── STATE ──────────────────────────────────────────────────────────────────
 let booking={shop:'a',service:null,date:null,time:null,first:'',last:'',email:'',phone:'',notes:''};
 let calYear,calMonth,adminLoggedIn=false;
-let adminFilter={status:'all',shop:'all'};
 
 // ── PARTICLES ─────────────────────────────────────────────────────────────
 function initParticles(){
@@ -1603,9 +1449,10 @@ function selectDate(ds){
   renderCalendar(); renderTimeSlots(ds);
 }
 
-function renderTimeSlots(ds){
-  // Only confirmed apts for THIS shop block the slot
-  const takenTimes=getApts().filter(a=>a.date===ds&&a.status==='confirmed'&&a.shop===booking.shop).map(a=>a.time);
+async function renderTimeSlots(ds){
+  const { data } = await db.from('appointments').select('time')
+    .eq('date', ds).eq('shop', booking.shop).eq('status', 'accepted');
+  const takenTimes = (data||[]).map(a=>a.time);
   const d=new Date(ds+'T12:00:00');
   const days=['Vasárnap','Hétfő','Kedd','Szerda','Csütörtök','Péntek','Szombat'];
   const mos=['jan.','feb.','már.','ápr.','máj.','jún.','júl.','aug.','szep.','okt.','nov.','dec.'];
@@ -1644,33 +1491,7 @@ function renderConfirm(){
     ${booking.phone?`<div class="confirm-row"><span>Telefon</span><strong>${booking.phone}</strong></div>`:''}
     ${booking.notes?`<div class="confirm-row"><span>Megjegyzés</span><strong>${booking.notes}</strong></div>`:''}`;
 }
-//REGI!!!!!!!!!! SUBMIT BOOKING MÓDOSÍTÁS SUPABASE-HEZ - AZ ALÁBBI KÓD HELYETT EZT HASZNÁLD!!!!!!!!!!
-/* function submitBooking(){
-  const ref='GO-'+Math.random().toString(36).substring(2,8).toUpperCase();
-  const apt={
-    id:ref, shop:booking.shop,
-    service:booking.service.name, serviceIcon:booking.service.icon,
-    date:booking.date, time:booking.time,
-    duration:booking.service.duration, price:booking.service.price,
-    first:booking.first, last:booking.last, email:booking.email,
-    phone:booking.phone, notes:booking.notes,
-    status:'pending', createdAt:new Date().toISOString()
-  };
-  const apts=getApts(); apts.push(apt); saveApts(apts);
-  const d=new Date(booking.date+'T12:00:00');
-  const mos=['jan.','feb.','már.','ápr.','máj.','jún.','júl.','aug.','szep.','okt.','nov.','dec.'];
-  const shop=SHOPS[booking.shop];
-  document.getElementById('ref-code').textContent='Kérelem azonosítója: '+ref;
-  document.getElementById('success-summary').innerHTML=`
-    <div class="confirm-card">
-      <div class="confirm-row"><span>Helyszín</span><strong>${booking.shop==='a'?'🟠':'🔵'} ${shop.name}</strong></div>
-      <div class="confirm-row"><span>Szolgáltatás</span><strong>${booking.service.icon} ${booking.service.name}</strong></div>
-      <div class="confirm-row"><span>Dátum és idő</span><strong>${d.getFullYear()}. ${mos[d.getMonth()]} ${d.getDate()}. — ${booking.time}</strong></div>
-      <div class="confirm-row"><span>Ár</span><strong>${booking.service.price}</strong></div>
-      <div class="confirm-row"><span>Cím</span><strong>📍 ${shop.addr}</strong></div>
-    </div>`;
-  goStep(5);
-} */
+
 async function submitBooking() {
   const ref = 'GO-' + Math.random().toString(36).substring(2, 8).toUpperCase();
 
@@ -1696,7 +1517,6 @@ async function submitBooking() {
   const { error } = await db
     .from('appointments')
     .insert([apt]);
-    db.from('appointments').select('*').then(r => console.log(r))
 
   if (error) {
     console.error('Booking error:', error.message);
@@ -1723,19 +1543,11 @@ async function submitBooking() {
 }
 
 
-// ── BOOKING STEPS ─────────────────────────────────────────────────────────
-function resetBookingSteps(){
-  booking = {...booking, service:null, date:null, time:null, first:'', last:'', email:'', phone:'', notes:''};
-  ['f-first','f-last','f-email','f-phone','f-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  document.getElementById('step1-next').disabled=true;
-  document.getElementById('step2-next').disabled=true;
-  document.getElementById('slots-grid').innerHTML='';
-  document.getElementById('time-slots-header').textContent='Először válasszon dátumot';
-  document.querySelectorAll('.service-select-card').forEach(c=>c.className='service-select-card');
-  const now=new Date(); calYear=now.getFullYear(); calMonth=now.getMonth();
-  renderServiceSelect();
-  renderCalendar();
-  goStep(1);
+
+function adminLogout(){
+  adminLoggedIn=false;
+  document.getElementById('admin-login-screen').style.display='block';
+  document.getElementById('admin-dashboard').style.display='none';
 }
 
 function adminLogin(){
@@ -1747,144 +1559,105 @@ function adminLogin(){
   }else{showToast('❌ Helytelen belépési adatok');}
 }
 
-// Load all appointments (sorted newest first)
+// ── ADMIN ─────────────────────────────────────────────────────────────────
 async function loadAppointments(statusFilter = 'all') {
-  let query = supabase
+  let query = db
     .from('appointments')
     .select('*')
     .order('created_at', { ascending: false });
-
-  if (statusFilter !== 'all') {
-    query = query.eq('status', statusFilter);
-  }
-
+  if (statusFilter !== 'all') query = query.eq('status', statusFilter);
   const { data, error } = await query;
   if (error) { console.error(error); return []; }
   return data;
 }
 
-// Accept a booking
 async function acceptBooking(id) {
-  const { error } = await supabase
-    .from('appointments')
-    .update({ status: 'accepted' })
-    .eq('id', id);
-
+  const { error } = await db.from('appointments').update({ status: 'accepted' }).eq('id', id);
   if (error) { alert('Hiba: ' + error.message); return false; }
   return true;
 }
 
-let appointments = [];
-
-async function initAdmin() {
-  appointments = await loadAppointments();
-  renderTable(appointments);
-
-  // Live updates — no page refresh needed
-  subscribeToBookings(async () => {
-    appointments = await loadAppointments(currentFilter);
-    renderTable(appointments);
-  });
-}
-
-async function handleAccept(id) {
-  const ok = await acceptBooking(id);
-  if (ok) {
-    appointments = await loadAppointments(currentFilter);
-    renderTable(appointments);
-  }
-}
-
-async function handleCancel(id) {
-  const ok = await cancelBooking(id);
-  if (ok) {
-    appointments = await loadAppointments(currentFilter);
-    renderTable(appointments);
-  }
-}
-
-document.addEventListener('DOMContentLoaded', initAdmin);
-
-// Cancel a booking
 async function cancelBooking(id) {
-  const { error } = await supabase
-    .from('appointments')
-    .update({ status: 'cancelled' })
-    .eq('id', id);
-
+  const { error } = await db.from('appointments').update({ status: 'cancelled' }).eq('id', id);
   if (error) { alert('Hiba: ' + error.message); return false; }
   return true;
 }
 
-// Delete a booking entirely
 async function deleteBooking(id) {
-  const { error } = await supabase
-    .from('appointments')
-    .delete()
-    .eq('id', id);
-
+  const { error } = await db.from('appointments').delete().eq('id', id);
   if (error) { alert('Hiba: ' + error.message); return false; }
   return true;
 }
 
-// Real-time listener — updates admin UI live when a new booking comes in
-function subscribeToBookings(onNewBooking) {
-  supabase
-    .channel('appointments-channel')
-    .on('postgres_changes',
-      { event: '*', schema: 'public', table: 'appointments' },
-      payload => onNewBooking(payload)
-    )
+function subscribeToBookings(onChange) {
+  db.channel('appointments-channel')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'appointments' }, onChange)
     .subscribe();
 }
 
+let allApts = [];
+let currentFilter = 'all';
 
-
-function adminLogout(){
-  adminLoggedIn=false;
-  document.getElementById('admin-login-screen').style.display='block';
-  document.getElementById('admin-dashboard').style.display='none';
+async function renderAdmin() {
+  allApts = await loadAppointments();
+  updateAdminStats(allApts);
+  renderAptList(currentFilter === 'all' ? allApts : allApts.filter(a => a.status === currentFilter));
+  subscribeToBookings(async () => {
+    allApts = await loadAppointments();
+    updateAdminStats(allApts);
+    renderAptList(currentFilter === 'all' ? allApts : allApts.filter(a => a.status === currentFilter));
+  });
 }
-function renderAdmin(){
-  const apts=getApts();
-  const confirmed=apts.filter(a=>a.status==='confirmed').length;
-  const revenue=apts.filter(a=>a.status==='confirmed').reduce((s,a)=>s+parseInt((a.price||'0').replace(/[^0-9]/g,'')),0);
-  document.getElementById('admin-stats').innerHTML=`
-    <div class="stat-card"><div class="stat-value stat-accent">${confirmed}</div><div class="stat-label">Megerősített</div></div>
+
+function updateAdminStats(apts) {
+  const confirmed = apts.filter(a => a.status === 'accepted').length;
+  const revenue = apts.filter(a => a.status === 'accepted')
+    .reduce((s, a) => s + parseInt((a.price || '0').replace(/[^0-9]/g, '')), 0);
+  document.getElementById('admin-stats').innerHTML = `
+    <div class="stat-card"><div class="stat-value stat-accent">${confirmed}</div><div class="stat-label">Elfogadott</div></div>
     <div class="stat-card"><div class="stat-value">${apts.length}</div><div class="stat-label">Összes foglalás</div></div>
     <div class="stat-card"><div class="stat-value stat-accent">${revenue.toLocaleString('hu-HU')} Ft</div><div class="stat-label">Bevétel (becsült)</div></div>`;
-  renderAptList(apts);
 }
-function filterApts(f,btn){
-  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+
+function filterApts(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  const apts=getApts();
-  renderAptList(f==='all'?apts:apts.filter(a=>a.status===f));
+  renderAptList(f === 'all' ? allApts : allApts.filter(a => a.status === f));
 }
-function renderAptList(apts){
-  const list=document.getElementById('apt-list');
-  if(!apts.length){list.innerHTML=`<div class="no-apts"><div class="empty-icon">📭</div><p>Nem található időpont</p></div>`;return;}
-  const mos=['jan.','feb.','már.','ápr.','máj.','jún.','júl.','aug.','szep.','okt.','nov.','dec.'];
-  list.innerHTML=[...apts].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).map(a=>{
-    const d=new Date(a.date+'T12:00:00');
-    const ds=`${d.getFullYear()}. ${mos[d.getMonth()]} ${d.getDate()}.`;
-    const sh=a.status==='confirmed'?'megerősített':'lemondott';
+
+function renderAptList(apts) {
+  const list = document.getElementById('apt-list');
+  if (!apts.length) {
+    list.innerHTML = `<div class="no-apts"><div class="empty-icon">📭</div><p>Nem található időpont</p></div>`;
+    return;
+  }
+  const mos = ['jan.','feb.','már.','ápr.','máj.','jún.','júl.','aug.','szep.','okt.','nov.','dec.'];
+  list.innerHTML = [...apts].map(a => {
+    const d = new Date(a.date + 'T12:00:00');
+    const ds = `${d.getFullYear()}. ${mos[d.getMonth()]} ${d.getDate()}.`;
+    const statusLabel = { pending: 'Függőben', accepted: 'Elfogadott', cancelled: 'Lemondott' }[a.status] || a.status;
+    const statusCls   = { pending: 'status-pending', accepted: 'status-confirmed', cancelled: 'status-cancelled' }[a.status] || '';
     return `<div class="apt-row">
       <div><div class="client-name">${escapeHTML(a.last)} ${escapeHTML(a.first)}</div><div class="client-email">${escapeHTML(a.email)}</div></div>
-      <div><div class="apt-service">${escapeHTML(a.serviceIcon)} ${escapeHTML(a.service)}</div><div style="font-size:0.77rem;color:rgba(255,255,255,0.33);margin-top:2px">${escapeHTML(a.duration)} · ${escapeHTML(a.price)}</div></div>
-      <div class="apt-datetime"><span>${ds}</span><span class="apt-time">${escapeHTML(a.time)}</span><span class="status-badge status-${escapeHTML(a.status)}">${escapeHTML(sh)}</span></div>
+      <div><div class="apt-service">${escapeHTML(a.service_icon||'')} ${escapeHTML(a.service)}</div><div style="font-size:0.77rem;color:rgba(255,255,255,0.33);margin-top:2px">${escapeHTML(a.duration||'')} · ${escapeHTML(a.price||'')}</div></div>
+      <div class="apt-datetime"><span>${ds}</span><span class="apt-time">${escapeHTML(a.time)}</span><span class="status-badge ${statusCls}">${statusLabel}</span></div>
       <div style="display:flex;flex-direction:column;gap:0.4rem;align-items:flex-end">
         <div style="font-size:0.7rem;color:rgba(255,255,255,0.22);font-family:monospace">${escapeHTML(a.id)}</div>
-        ${a.status==='confirmed'?`<button class="cancel-btn" onclick="cancelApt('${escapeHTML(a.id)}')">Lemondás</button>`:''}
+        ${a.status === 'pending' ? `<button class="cancel-btn" style="background:rgba(52,199,105,0.12);border-color:rgba(52,199,105,0.3);color:#5dda8a" onclick="handleAccept('${escapeHTML(a.id)}')">✓ Elfogad</button>` : ''}
+        ${a.status !== 'cancelled' ? `<button class="cancel-btn" onclick="handleCancel('${escapeHTML(a.id)}')">Lemond</button>` : ''}
       </div>
     </div>`;
   }).join('');
 }
-function cancelApt(id){
-  if(!confirm('Biztosan le szeretné mondani ezt az időpontot?'))return;
-  const apts=getApts(),idx=apts.findIndex(a=>a.id===id);
-  if(idx!==-1){apts[idx].status='cancelled';saveApts(apts);}
-  renderAdmin();showToast('✓ Időpont lemondva');
+
+async function handleAccept(id) {
+  if (await acceptBooking(id)) { allApts = await loadAppointments(); updateAdminStats(allApts); renderAptList(currentFilter === 'all' ? allApts : allApts.filter(a => a.status === currentFilter)); showToast('✓ Foglalás elfogadva'); }
+}
+
+async function handleCancel(id) {
+  if (!confirm('Biztosan le szeretné mondani ezt az időpontot?')) return;
+  if (await cancelBooking(id)) { allApts = await loadAppointments(); updateAdminStats(allApts); renderAptList(currentFilter === 'all' ? allApts : allApts.filter(a => a.status === currentFilter)); showToast('✓ Időpont lemondva'); }
 }
 
 let toastT;
@@ -1940,30 +1713,20 @@ dots.forEach((dot, i) => dot.addEventListener('click', () => goTo(i)));
 // Auto-advance every 5 seconds
 setInterval(() => goTo(current + 1), 5000);
 (function() {
-  const eyeWrap = document.querySelector('.eye-svg-wrap');
-  const eyeDisabled = eyeWrap && eyeWrap.dataset.eyeDisabled === 'true';
-
-  if (eyeDisabled) {
-    const top = document.getElementById('eyelid-top');
-    const bottom = document.getElementById('eyelid-bottom');
-    if (top) top.setAttribute('d', 'M 20 90 Q 160 0 300 90');
-    if (bottom) bottom.setAttribute('d', 'M 20 90 Q 160 180 300 90');
-    return;
-  }
-
   function blinkEye() {
     const top = document.getElementById('eyelid-top');
     const bottom = document.getElementById('eyelid-bottom');
     if (!top || !bottom) return;
 
-    top.setAttribute('d', 'M 20 90 Q 160 90 300 90');
-    bottom.setAttribute('d', 'M 20 90 Q 160 90 300 90');
+   top.setAttribute('d', 'M 20 90 Q 160 90 300 90');
+bottom.setAttribute('d', 'M 20 90 Q 160 90 300 90');
 
-    setTimeout(function() {
-      top.setAttribute('d', 'M 20 90 Q 160 0 300 90');
-      bottom.setAttribute('d', 'M 20 90 Q 160 180 300 90');
-      setTimeout(blinkEye, 7000 + Math.random() * 4000);
-    }, 400);
+setTimeout(function() {
+  top.setAttribute('d', 'M 20 90 Q 160 0 300 90');
+  bottom.setAttribute('d', 'M 20 90 Q 160 180 300 90');
+  setTimeout(blinkEye, 7000 + Math.random() * 4000);
+}, 400); // was 250, increase this for slower blink
+
   }
   blinkEye();
 })();

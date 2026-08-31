@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — Foglalások</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #f7f6f3;
+      --surface:  #ffffff;
+      --border:   #e4e2da;
+      --text:     #1a1a18;
+      --muted:    #6b6b66;
+      --accent:   #1a1a18;
+
+      --pending-bg:   #fef9ec;
+      --pending-text: #92600a;
+      --accepted-bg:  #eaf3de;
+      --accepted-text:#3b6d11;
+      --cancelled-bg: #fcebeb;
+      --cancelled-text:#a32d2d;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-size: 14px;
+      min-height: 100vh;
+    }
+
+    /* ── Top bar ── */
+    .topbar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .topbar-logo {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .topbar-logo .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--text);
+    }
+    .live-badge {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--muted);
+    }
+    .live-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #3b6d11;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    /* ── Main layout ── */
+    .main { padding: 2rem; max-width: 1100px; margin: 0 auto; }
+
+    /* ── Stats row ── */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 1.5rem;
+    }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+    }
+    .stat-label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .stat-value {
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: -0.03em;
+    }
+
+    /* ── Filter bar ── */
+    .filter-bar {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 1rem;
+      align-items: center;
+    }
+    .filter-btn {
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      font-size: 13px;
+      cursor: pointer;
+      color: var(--muted);
+      transition: all 0.15s;
+    }
+    .filter-btn:hover { color: var(--text); border-color: #b0afa8; }
+    .filter-btn.active {
+      background: var(--text);
+      color: #fff;
+      border-color: var(--text);
+    }
+    .spacer { flex: 1; }
+    .search-input {
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      font-size: 13px;
+      color: var(--text);
+      outline: none;
+      width: 200px;
+      transition: border-color 0.15s;
+    }
+    .search-input:focus { border-color: var(--text); }
+
+    /* ── Table ── */
+    .table-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    thead th {
+      padding: 10px 16px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      border-bottom: 1px solid var(--border);
+      background: #fafaf8;
+    }
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.1s;
+    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #fafaf8; }
+    td {
+      padding: 12px 16px;
+      vertical-align: middle;
+    }
+
+    .name-cell { font-weight: 500; font-size: 14px; }
+    .sub-cell  { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+    .badge-pending   { background: var(--pending-bg);   color: var(--pending-text); }
+    .badge-accepted  { background: var(--accepted-bg);  color: var(--accepted-text); }
+    .badge-cancelled { background: var(--cancelled-bg); color: var(--cancelled-text); }
+
+    .actions { display: flex; gap: 6px; }
+    .btn {
+      padding: 5px 12px;
+      border-radius: 7px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      color: var(--text);
+    }
+    .btn:hover { background: var(--bg); }
+    .btn-accept { color: #3b6d11; border-color: #c0dd97; }
+    .btn-accept:hover { background: var(--accepted-bg); }
+    .btn-cancel { color: #a32d2d; border-color: #f7c1c1; }
+    .btn-cancel:hover { background: var(--cancelled-bg); }
+    .btn-delete { color: var(--muted); }
+    .btn-delete:hover { color: #a32d2d; border-color: #f7c1c1; background: var(--cancelled-bg); }
+
+    /* ── Empty state ── */
+    .empty {
+      text-align: center;
+      padding: 4rem 1rem;
+      color: var(--muted);
+    }
+    .empty-icon { font-size: 32px; margin-bottom: 12px; }
+    .empty h3 { font-size: 15px; font-weight: 500; margin-bottom: 4px; color: var(--text); }
+
+    /* ── Detail drawer ── */
+    .drawer-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.3);
+      z-index: 100;
+    }
+    .drawer-overlay.open { display: block; }
+    .drawer {
+      position: fixed;
+      top: 0; right: -400px; bottom: 0;
+      width: 380px;
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      padding: 2rem;
+      overflow-y: auto;
+      transition: right 0.25s cubic-bezier(0.4,0,0.2,1);
+      z-index: 101;
+    }
+    .drawer.open { right: 0; }
+    .drawer-header {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      margin-bottom: 1.5rem;
+    }
+    .drawer-close {
+      background: none; border: 1px solid var(--border);
+      border-radius: 6px; padding: 4px 8px;
+      cursor: pointer; font-size: 18px; color: var(--muted);
+      line-height: 1;
+    }
+    .drawer-close:hover { color: var(--text); }
+    .drawer-section {
+      margin-bottom: 1.25rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .drawer-section:last-child { border-bottom: none; }
+    .drawer-row {
+      display: flex; justify-content: space-between;
+      padding: 5px 0;
+      font-size: 13px;
+    }
+    .drawer-row span:first-child { color: var(--muted); }
+    .drawer-row span:last-child  { font-weight: 500; text-align: right; }
+
+    /* ── Config overlay ── */
+    .config-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+    .config-overlay.open { display: flex; }
+    .config-box {
+      background: var(--surface);
+      border-radius: 14px;
+      padding: 2rem;
+      width: 460px;
+      max-width: 95vw;
+    }
+    .config-box h2 { font-size: 16px; font-weight: 600; margin-bottom: 1.25rem; }
+    .config-field { margin-bottom: 1rem; }
+    .config-field label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 5px; }
+    .config-field input {
+      width: 100%;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      font-size: 13px;
+      color: var(--text);
+      font-family: monospace;
+      outline: none;
+    }
+    .config-field input:focus { border-color: var(--text); }
+    .config-save {
+      width: 100%;
+      padding: 10px;
+      background: var(--text);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      margin-top: 0.5rem;
+    }
+    .config-note { font-size: 12px; color: var(--muted); margin-top: 10px; line-height: 1.5; }
+
+    @media (max-width: 700px) {
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .drawer { width: 100%; right: -100%; }
+      .main { padding: 1rem; }
+      .topbar { padding: 0 1rem; }
+    }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- Config overlay (shown on first load if keys missing) -->
+<div class="config-overlay" id="config-overlay">
+  <div class="config-box">
+    <h2>Supabase kapcsolat beállítása</h2>
+    <div class="config-field">
+      <label>Project URL</label>
+      <input type="text" id="cfg-url" placeholder="https://xxxxx.supabase.co">
+    </div>
+    <div class="config-field">
+      <label>Anon public key</label>
+      <input type="text" id="cfg-key" placeholder="eyJh...">
+    </div>
+    <button class="config-save" onclick="saveConfig()">Mentés és csatlakozás</button>
+    <p class="config-note">Az adatok csak ebben a böngészőben tárolódnak. A kulcsok a Supabase project Settings → API oldalán találhatók.</p>
+  </div>
+</div>
+
+<!-- Top bar -->
+<div class="topbar">
+  <div class="topbar-logo">
+    <span class="dot"></span>
+    Foglalás Admin
+  </div>
+  <div style="display:flex;gap:12px;align-items:center">
+    <div class="live-badge" id="live-badge" style="display:none">
+      <span class="live-dot"></span> Élő
+    </div>
+    <button class="btn" onclick="document.getElementById('config-overlay').classList.add('open')" style="font-size:12px">
+      ⚙ Beállítások
+    </button>
+  </div>
+</div>
+
+<!-- Main -->
+<div class="main">
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-label">Összes</div>
+      <div class="stat-value" id="stat-all">—</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Függőben</div>
+      <div class="stat-value" id="stat-pending" style="color:var(--pending-text)">—</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Elfogadott</div>
+      <div class="stat-value" id="stat-accepted" style="color:var(--accepted-text)">—</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Lemondott</div>
+      <div class="stat-value" id="stat-cancelled" style="color:var(--cancelled-text)">—</div>
+    </div>
+  </div>
+
+  <!-- Filter bar -->
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="setFilter('all', this)">Összes</button>
+    <button class="filter-btn" onclick="setFilter('pending', this)">Függőben</button>
+    <button class="filter-btn" onclick="setFilter('accepted', this)">Elfogadott</button>
+    <button class="filter-btn" onclick="setFilter('cancelled', this)">Lemondott</button>
+    <div class="spacer"></div>
+    <input class="search-input" type="text" placeholder="Keresés…" oninput="onSearch(this.value)" id="search-input">
+  </div>
+
+  <!-- Table -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Ügyfél</th>
+          <th>Szolgáltatás</th>
+          <th>Dátum / Idő</th>
+          <th>Helyszín</th>
+          <th>Státusz</th>
+          <th>Műveletek</th>
+        </tr>
+      </thead>
+      <tbody id="tbody">
+        <tr><td colspan="6"><div class="empty"><div class="empty-icon">⏳</div><h3>Betöltés…</h3></div></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Detail drawer -->
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <div>
+      <div style="font-size:15px;font-weight:600" id="drawer-name"></div>
+      <div style="font-size:12px;color:var(--muted);margin-top:3px" id="drawer-ref"></div>
+    </div>
+    <button class="drawer-close" onclick="closeDrawer()">✕</button>
+  </div>
+  <div id="drawer-body"></div>
+</div>
+
+<script>
+  // ── Config ──────────────────────────────────────────────────
+  let supabaseClient = null;
+  let allAppointments = [];
+  let currentFilter = 'all';
+  let searchQuery = '';
+
+  function loadConfig() {
+    return {
+      url: localStorage.getItem('sb_url') || '',
+      key: localStorage.getItem('sb_key') || ''
+    };
+  }
+
+  function saveConfig() {
+    const url = document.getElementById('cfg-url').value.trim();
+    const key = document.getElementById('cfg-key').value.trim();
+    if (!url || !key) { alert('Kérlek töltsd ki mindkét mezőt.'); return; }
+    localStorage.setItem('sb_url', url);
+    localStorage.setItem('sb_key', key);
+    document.getElementById('config-overlay').classList.remove('open');
+    initSupabase(url, key);
+  }
+
+  function initSupabase(url, key) {
+    supabaseClient = window.supabase.createClient(url, key);
+    loadAll();
+    subscribeRealtime();
+    document.getElementById('live-badge').style.display = 'flex';
+  }
+
+  // ── Data ─────────────────────────────────────────────────────
+  async function loadAll() {
+    if (!supabaseClient) return;
+    const { data, error } = await supabaseClient
+      .from('appointments')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) { console.error(error); return; }
+    allAppointments = data || [];
+    updateStats();
+    render();
+  }
+
+  function updateStats() {
+    const all       = allAppointments.length;
+    const pending   = allAppointments.filter(a => a.status === 'pending').length;
+    const accepted  = allAppointments.filter(a => a.status === 'accepted').length;
+    const cancelled = allAppointments.filter(a => a.status === 'cancelled').length;
+
+    document.getElementById('stat-all').textContent       = all;
+    document.getElementById('stat-pending').textContent   = pending;
+    document.getElementById('stat-accepted').textContent  = accepted;
+    document.getElementById('stat-cancelled').textContent = cancelled;
+  }
+
+  function subscribeRealtime() {
+    supabaseClient
+      .channel('admin-channel')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'appointments' }, () => {
+        loadAll();
+      })
+      .subscribe();
+  }
+
+  // ── Actions ───────────────────────────────────────────────────
+  async function setStatus(id, status) {
+    const { error } = await supabaseClient
+      .from('appointments')
+      .update({ status })
+      .eq('id', id);
+    if (error) { alert('Hiba: ' + error.message); return; }
+    await loadAll();
+    // If drawer is open for this id, refresh it
+    if (document.getElementById('drawer').classList.contains('open')) {
+      const apt = allAppointments.find(a => a.id === id);
+      if (apt) openDrawer(apt);
+    }
+  }
+
+  async function deleteApt(id) {
+    if (!confirm('Biztosan törlöd ezt a foglalást?')) return;
+    const { error } = await supabaseClient
+      .from('appointments')
+      .delete()
+      .eq('id', id);
+    if (error) { alert('Hiba: ' + error.message); return; }
+    closeDrawer();
+    await loadAll();
+  }
+
+  // ── Render ───────────────────────────────────────────────────
+  function filtered() {
+    let list = allAppointments;
+    if (currentFilter !== 'all') list = list.filter(a => a.status === currentFilter);
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      list = list.filter(a =>
+        (a.first + ' ' + a.last).toLowerCase().includes(q) ||
+        (a.email || '').toLowerCase().includes(q) ||
+        (a.service || '').toLowerCase().includes(q) ||
+        (a.id || '').toLowerCase().includes(q)
+      );
+    }
+    return list;
+  }
+
+  function formatDate(dateStr) {
+    if (!dateStr) return '—';
+    const d = new Date(dateStr + 'T12:00:00');
+    const mos = ['jan.','feb.','már.','ápr.','máj.','jún.','júl.','aug.','szep.','okt.','nov.','dec.'];
+    return `${d.getFullYear()}. ${mos[d.getMonth()]} ${d.getDate()}.`;
+  }
+
+  function shopName(shop) {
+    const names = { a: '🟠 A helyszín', b: '🔵 B helyszín' };
+    return names[shop] || shop;
+  }
+
+  function badgeHtml(status) {
+    const labels = { pending: 'Függőben', accepted: 'Elfogadott', cancelled: 'Lemondott' };
+    return `<span class="badge badge-${status}">${labels[status] || status}</span>`;
+  }
+
+  function actionBtns(apt) {
+    const btns = [];
+    if (apt.status === 'pending') {
+      btns.push(`<button class="btn btn-accept" onclick="setStatus('${apt.id}','accepted');event.stopPropagation()">Elfogad</button>`);
+      btns.push(`<button class="btn btn-cancel" onclick="setStatus('${apt.id}','cancelled');event.stopPropagation()">Lemond</button>`);
+    } else if (apt.status === 'accepted') {
+      btns.push(`<button class="btn btn-cancel" onclick="setStatus('${apt.id}','cancelled');event.stopPropagation()">Lemond</button>`);
+    } else if (apt.status === 'cancelled') {
+      btns.push(`<button class="btn btn-accept" onclick="setStatus('${apt.id}','accepted');event.stopPropagation()">Visszaállít</button>`);
+    }
+    btns.push(`<button class="btn btn-delete" onclick="deleteApt('${apt.id}');event.stopPropagation()">Töröl</button>`);
+    return `<div class="actions">${btns.join('')}</div>`;
+  }
+
+  function render() {
+    const tbody = document.getElementById('tbody');
+    const list  = filtered();
+
+    if (!list.length) {
+      tbody.innerHTML = `<tr><td colspan="6"><div class="empty">
+        <div class="empty-icon">📭</div>
+        <h3>Nincs megjeleníthető foglalás</h3>
+      </div></td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = list.map(apt => `
+      <tr onclick="openDrawer(${JSON.stringify(apt).replace(/"/g,'&quot;')})">
+        <td>
+          <div class="name-cell">${apt.first} ${apt.last}</div>
+          <div class="sub-cell">${apt.email}</div>
+        </td>
+        <td>
+          <div>${apt.service_icon || ''} ${apt.service || '—'}</div>
+          <div class="sub-cell">${apt.duration || ''} ${apt.price ? '· ' + apt.price : ''}</div>
+        </td>
+        <td>
+          <div>${formatDate(apt.date)}</div>
+          <div class="sub-cell">${apt.time || '—'}</div>
+        </td>
+        <td>${shopName(apt.shop)}</td>
+        <td>${badgeHtml(apt.status)}</td>
+        <td>${actionBtns(apt)}</td>
+      </tr>
+    `).join('');
+  }
+
+  // ── Drawer ────────────────────────────────────────────────────
+  function openDrawer(apt) {
+    document.getElementById('drawer-name').textContent = apt.first + ' ' + apt.last;
+    document.getElementById('drawer-ref').textContent  = apt.id;
+    document.getElementById('drawer-body').innerHTML = `
+      <div class="drawer-section">
+        <div class="drawer-row"><span>Státusz</span>${badgeHtml(apt.status)}</div>
+        <div class="drawer-row"><span>Beküldve</span><span>${new Date(apt.created_at).toLocaleString('hu-HU')}</span></div>
+      </div>
+      <div class="drawer-section">
+        <div class="drawer-row"><span>Szolgáltatás</span><span>${apt.service_icon || ''} ${apt.service}</span></div>
+        <div class="drawer-row"><span>Dátum</span><span>${formatDate(apt.date)}</span></div>
+        <div class="drawer-row"><span>Időpont</span><span>${apt.time}</span></div>
+        <div class="drawer-row"><span>Időtartam</span><span>${apt.duration || '—'}</span></div>
+        <div class="drawer-row"><span>Ár</span><span>${apt.price || '—'}</span></div>
+        <div class="drawer-row"><span>Helyszín</span><span>${shopName(apt.shop)}</span></div>
+      </div>
+      <div class="drawer-section">
+        <div class="drawer-row"><span>E-mail</span><span><a href="mailto:${apt.email}" style="color:inherit">${apt.email}</a></span></div>
+        <div class="drawer-row"><span>Telefon</span><span>${apt.phone || '—'}</span></div>
+      </div>
+      ${apt.notes ? `<div class="drawer-section"><div style="font-size:12px;color:var(--muted);margin-bottom:6px">Megjegyzés</div><div style="font-size:13px;line-height:1.5">${apt.notes}</div></div>` : ''}
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:1rem">
+        ${apt.status === 'pending' ? `
+          <button class="btn btn-accept" style="width:100%;padding:9px;font-size:13px" onclick="setStatus('${apt.id}','accepted')">✓ Fogadás elfogadása</button>
+          <button class="btn btn-cancel" style="width:100%;padding:9px;font-size:13px" onclick="setStatus('${apt.id}','cancelled')">✕ Foglalás lemondása</button>
+        ` : apt.status === 'accepted' ? `
+          <button class="btn btn-cancel" style="width:100%;padding:9px;font-size:13px" onclick="setStatus('${apt.id}','cancelled')">✕ Lemondás</button>
+        ` : `
+          <button class="btn btn-accept" style="width:100%;padding:9px;font-size:13px" onclick="setStatus('${apt.id}','accepted')">↩ Visszaállítás</button>
+        `}
+        <button class="btn btn-delete" style="width:100%;padding:9px;font-size:13px" onclick="deleteApt('${apt.id}')">Foglalás törlése</button>
+      </div>
+    `;
+    document.getElementById('drawer').classList.add('open');
+    document.getElementById('drawer-overlay').classList.add('open');
+  }
+
+  function closeDrawer() {
+    document.getElementById('drawer').classList.remove('open');
+    document.getElementById('drawer-overlay').classList.remove('open');
+  }
+
+  // ── Filters ───────────────────────────────────────────────────
+  function setFilter(f, btn) {
+    currentFilter = f;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    render();
+  }
+
+  function onSearch(val) {
+    searchQuery = val;
+    render();
+  }
+
+  // ── Init ──────────────────────────────────────────────────────
+  window.addEventListener('DOMContentLoaded', () => {
+    const { url, key } = loadConfig();
+    if (url && key) {
+      document.getElementById('cfg-url').value = url;
+      document.getElementById('cfg-key').value = key;
+      initSupabase(url, key);
+    } else {
+      document.getElementById('config-overlay').classList.add('open');
+      document.getElementById('tbody').innerHTML = `<tr><td colspan="6"><div class="empty">
+        <div class="empty-icon">🔑</div>
+        <h3>Kapcsold be a Supabase integrációt a beállításokban</h3>
+      </div></td></tr>`;
+    }
+  });
+</script>
+</body>
+</html>
